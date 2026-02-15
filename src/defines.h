@@ -26,4 +26,31 @@ struct Line
   Point end_point; 
 };
 
+void draw_line(Point start_point, Point end_point, TGAImage &framebuffer, TGAColor color)
+{
+  bool steep = std::abs(start_point.x - end_point.x) < std::abs(start_point.y - end_point.y);
+  if (steep)
+    {
+      std::swap(start_point.x, start_point.y);
+      std::swap(end_point.x, end_point.y); 
+    }
+  
+  if (start_point.x > end_point.x)
+    {
+      std::swap(start_point.x, end_point.x);
+      std::swap(start_point.y, end_point.y); 
+    }
+
+  float y = start_point.y; 
+  for (int x = start_point.x; x < end_point.x; x++)
+    {
+      if (steep)
+	framebuffer.set(y, x, color);
+      else 
+	framebuffer.set(x, y, color);
+
+      y += (end_point.y - start_point.y) / float(end_point.x - start_point.x); 
+    }
+} 
+
 #endif
