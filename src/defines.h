@@ -41,16 +41,22 @@ void draw_line(Point start_point, Point end_point, TGAImage &framebuffer, TGACol
       std::swap(start_point.y, end_point.y); 
     }
 
-  float slope = (float)(end_point.y - start_point.y) / float(end_point.x - start_point.x); 
-  float y = (float)start_point.y; 
+  int y = start_point.y;
+  float error = 0.f;
+  float slope = std::abs(end_point.y - start_point.y) / static_cast<float>(end_point.x - start_point.x);  
   for (int x = start_point.x; x < end_point.x; x++)
     {
       if (steep)
-	framebuffer.set((int)y, x, color);
+	framebuffer.set(y, x, color);
       else 
-	framebuffer.set(x, (int)y, color);
+	framebuffer.set(x, y, color);
 
-      y += slope; 
+      error += slope;
+      if (error > .5)
+	{
+	  y += end_point.y > start_point.y ? 1 : -1;
+	  error -= 1.f; 
+	}
     }
 } 
 
@@ -69,17 +75,24 @@ void draw_line(Line line, TGAImage &framebuffer, TGAColor color)
       std::swap(line.start_point.y, line.end_point.y); 
     }
 
-  float slope = (float)(end_point.y - start_point.y) / float(end_point.x - start_point.x); 
-  float y = (float)line.start_point.y; 
+  int y = line.start_point.y;
+  float error = 0.f;
+  float slope = std::abs(line.end_point.y - line.start_point.y) / static_cast<float>(line.end_point.x - line.start_point.x);  
   for (int x = line.start_point.x; x < line.end_point.x; x++)
     {
       if (steep)
-	framebuffer.set((int)y, x, color);
+	framebuffer.set(y, x, color);
       else 
-	framebuffer.set(x, (int)y, color);
+	framebuffer.set(x, y, color);
 
-      y += slope; 
+      error += slope;
+      if (error > .5)
+	{
+	  y += line.end_point.y > line.start_point.y ? 1 : -1;
+	  error -= 1.f; 
+	}
     }
+
 } 
 
 #endif
