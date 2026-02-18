@@ -42,8 +42,7 @@ void draw_line(Point start_point, Point end_point, TGAImage &framebuffer, TGACol
     }
 
   int y = start_point.y;
-  float error = 0.f;
-  float slope = std::abs(end_point.y - start_point.y) / static_cast<float>(end_point.x - start_point.x);  
+  int ierror = 0; 
   for (int x = start_point.x; x < end_point.x; x++)
     {
       if (steep)
@@ -51,13 +50,11 @@ void draw_line(Point start_point, Point end_point, TGAImage &framebuffer, TGACol
       else 
 	framebuffer.set(x, y, color);
 
-      error += slope;
-      if (error > .5)
-	{
-	  y += end_point.y > start_point.y ? 1 : -1;
-	  error -= 1.f; 
-	}
-    }
+      ierror += 2 * std::abs(end_point.y - start_point.y); 
+	
+      y += (end_point.y > start_point.y ? 1 : -1) * (ierror > (end_point.x - start_point.x)); // Up or down ? 
+      ierror -= 2 * (end_point.x - start_point.x) * (ierror > (end_point.x - start_point.x)); 
+    }	
 } 
 
 void draw_line(Line line, TGAImage &framebuffer, TGAColor color)
@@ -76,8 +73,7 @@ void draw_line(Line line, TGAImage &framebuffer, TGAColor color)
     }
 
   int y = line.start_point.y;
-  float error = 0.f;
-  float slope = std::abs(line.end_point.y - line.start_point.y) / static_cast<float>(line.end_point.x - line.start_point.x);  
+  int ierror = 0; 
   for (int x = line.start_point.x; x < line.end_point.x; x++)
     {
       if (steep)
@@ -85,14 +81,72 @@ void draw_line(Line line, TGAImage &framebuffer, TGAColor color)
       else 
 	framebuffer.set(x, y, color);
 
-      error += slope;
-      if (error > .5)
+      ierror += 2 * std::abs(line.end_point.y - line.start_point.y); 
+	
+      y += (line.end_point.y > line.start_point.y ? 1 : -1) * (ierror > (line.end_point.x - line.start_point.x)); // Up or down ? 
+      ierror -= 2 * (line.end_point.x - line.start_point.x) * (ierror > (line.end_point.x - line.start_point.x)); 
+    }	
+} 
+
+bool object_to_render(char *filename)
+{
+  assert(filename);
+  
+  FILE* file = fopen(filename, "r");
+  if (!file)
+    return false;
+
+  XMFLOAT3 positions[14700];
+  XMFLOAT3 normals[14700];
+  XMFLOAT2 texcoords[14700];
+  
+  int posCount = 0;
+  int normalCount = 0;
+  int texCount = 0;
+
+  char line[15000];
+
+  while (fgets(line, sizeof(line), file))
+    {
+      if (line[0] == 'v' && line[1] == ' ')
 	{
-	  y += line.end_point.y > line.start_point.y ? 1 : -1;
-	  error -= 1.f; 
+	  float x, y, z;
+	  float tx, ty; 
+	  float nx, ny, nz;
+	  int read = sscanf(line, "v %f %f %f %f %f %f %f %f",
+			    &x, &y, &z, &tx, &ty, &nx, &ny, &nz);
+	  
+	  if (read == 8)
+	    {
+	      positions[posCount++] = XMFLOAT3(x, y, z);	    
+	      normals[normalCount++] = XMFLOAT3(nx, ny, nz); 
+	      texcoords[texCount++] = XMFLOAT2(tx, ty); 	    
+	    }
 	}
     }
 
-} 
+  fclose(file);
+
+  if (posCount == 0 || posCount != normalCount)
+    return false;
+
+  vertexCount = posCount;
+  indexCount  = Buffer->vertexCount;
+
+  vertices = new HemisphericVertex[Buffer->vertexCount];
+  indices  = new uint32_t[Buffer->indexCount];
+
+  for (int i = 0; i < posCount; ++i)
+    {
+      Buffer->vertices[i].position = positions[i];
+      Buffer->vertices[i].normal   = normals[i];
+      Buffer->vertices[i].texture  = texcoords[i];
+
+      Buffer->indices[i] = i;
+    }
+
+  return true;
+
+}
 
 #endif
