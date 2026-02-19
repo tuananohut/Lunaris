@@ -2,6 +2,7 @@
 #define DEFINES_H
 
 #include <cmath>
+#include "mathlib.h"
 #include "tgaimage.h"
 
 constexpr TGAColor white   = {255, 255, 255, 255}; // attention, BGRA order
@@ -14,17 +15,36 @@ constexpr TGAColor navy    = { 61,  23,  21, 255};
 constexpr TGAColor purple  = {152,  37, 152, 255};
 constexpr TGAColor grey    = {233, 233, 241, 255};
 
-struct Point
+void draw_line(int x1, int y1, int x2, int y2, TGAImage &framebuffer, TGAColor color)
 {
-  int x;
-  int y; 
-};
+  bool steep = std::abs(x1 - x2) < std::abs(y1 - y2);
+  if (steep)
+    {
+      std::swap(x1, y1);
+      std::swap(x2, y2); 
+    }
+  
+  if (x1 > x2)
+    {
+      std::swap(x1, x2);
+      std::swap(y1, y2); 
+    }
 
-struct Line
-{
-  Point start_point;
-  Point end_point; 
-}; 
+  int y = y1;
+  int ierror = 0; 
+  for (int x = x1; x < x2; x++)
+    {
+      if (steep)
+	framebuffer.set(y, x, color);
+      else 
+	framebuffer.set(x, y, color);
+
+      ierror += 2 * std::abs(y2 - y1); 
+	
+      y += (y2 > y1 ? 1 : -1) * (ierror > (x2 - x1)); // Up or down ? 
+      ierror -= 2 * (x2 - x1) * (ierror > (x2 - x1)); 
+    }	
+} 
 
 void draw_line(Point start_point, Point end_point, TGAImage &framebuffer, TGAColor color)
 {
@@ -87,66 +107,5 @@ void draw_line(Line line, TGAImage &framebuffer, TGAColor color)
       ierror -= 2 * (line.end_point.x - line.start_point.x) * (ierror > (line.end_point.x - line.start_point.x)); 
     }	
 } 
-
-bool object_to_render(char *filename)
-{
-  assert(filename);
-  
-  FILE* file = fopen(filename, "r");
-  if (!file)
-    return false;
-
-  XMFLOAT3 positions[14700];
-  XMFLOAT3 normals[14700];
-  XMFLOAT2 texcoords[14700];
-  
-  int posCount = 0;
-  int normalCount = 0;
-  int texCount = 0;
-
-  char line[15000];
-
-  while (fgets(line, sizeof(line), file))
-    {
-      if (line[0] == 'v' && line[1] == ' ')
-	{
-	  float x, y, z;
-	  float tx, ty; 
-	  float nx, ny, nz;
-	  int read = sscanf(line, "v %f %f %f %f %f %f %f %f",
-			    &x, &y, &z, &tx, &ty, &nx, &ny, &nz);
-	  
-	  if (read == 8)
-	    {
-	      positions[posCount++] = XMFLOAT3(x, y, z);	    
-	      normals[normalCount++] = XMFLOAT3(nx, ny, nz); 
-	      texcoords[texCount++] = XMFLOAT2(tx, ty); 	    
-	    }
-	}
-    }
-
-  fclose(file);
-
-  if (posCount == 0 || posCount != normalCount)
-    return false;
-
-  vertexCount = posCount;
-  indexCount  = Buffer->vertexCount;
-
-  vertices = new HemisphericVertex[Buffer->vertexCount];
-  indices  = new uint32_t[Buffer->indexCount];
-
-  for (int i = 0; i < posCount; ++i)
-    {
-      Buffer->vertices[i].position = positions[i];
-      Buffer->vertices[i].normal   = normals[i];
-      Buffer->vertices[i].texture  = texcoords[i];
-
-      Buffer->indices[i] = i;
-    }
-
-  return true;
-
-}
 
 #endif
