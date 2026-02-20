@@ -1,9 +1,49 @@
-# Tiny Renderer
+# Lunaris — CPU Software Rasterizer
 
-Tiny renderer implementation in C++. No graphics API used in this project.
+Lunaris is a CPU-based software rasterizer written in C++ from scratch, without relying on any graphics API such as DirectX, OpenGL, or Vulkan.
 
-https://haqr.eu/tinyrenderer
+The purpose of this project is to explore and implement the fundamental principles of the graphics pipeline entirely in software.
 
-https://youtu.be/qjWkNZ0SXfo?si=KkETnocY3xAOUygR
+This renderer demonstrates how modern GPUs work internally by reproducing their core functionality on the CPU.
 
-https://github.com/tsoding/formula
+---
+
+## Screenshots
+
+![African Head](images/african_head.png)
+
+![Bunny](images/bunny.png)
+
+![Penger](images/penger.png)
+
+![Teapot](images/teapot.png)
+
+---
+
+## Features
+
+This project is currently a work in progress.
+
+- Bresenham's Line Drawing algorithm
+- No external graphics API
+- CPU-based rendering
+- OBJ model loading
+
+---
+
+## Acknowledgements
+
+This project was inspired by the following resources:
+
+- https://haqr.eu/tinyrenderer
+- https://youtu.be/qjWkNZ0SXfo
+- https://github.com/tsoding/formula
+
+---
+
+## 3D Models Used
+
+- https://github.com/Max-Kawula/penger-obj
+- https://graphics.stanford.edu/courses/cs148-10-summer/as3/code/as3/teapot.obj
+- https://graphics.stanford.edu/~mdfisher/Data/Meshes/bunny.obj
+

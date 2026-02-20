@@ -3,6 +3,20 @@
 
 #include "defines.h"
 
+void test_triangle(TGAImage &framebuffer)
+{
+  int ax =  7 * 8, ay =  3 * 8;
+  int bx = 12 * 8, by = 37 * 8;
+  int cx = 62 * 8, cy = 53 * 8;
+  
+  Point point_1 = { ax, ay };
+  Point point_2 = { bx, by };
+  Point point_3 = { cx, cy };
+
+  draw_triangle(point_1, point_2, point_3,
+		framebuffer, pink);
+}
+
 int main(int argc, char **argv)
 {
   constexpr int width  = 64;
