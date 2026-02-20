@@ -8,8 +8,8 @@
 
 struct ModelBuffer
 {
-  Vector3f *vertices;
-  Vector3i *faces;
+  Vector3f vertices[];
+  Vector3i faces[][];
 
   int vertex_count;
   int face_count; 

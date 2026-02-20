@@ -7,6 +7,19 @@ struct Point
   int y; 
 };
 
+struct Point2f
+{
+  float x;
+  float y; 
+};
+
+struct Point3f
+{
+  float x;
+  float y; 
+  float z; 
+};
+
 struct Vector3f
 {
   float x;

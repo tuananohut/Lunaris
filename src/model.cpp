@@ -51,4 +51,3 @@ bool object_to_render(char *filename, ModelBuffer &buffer)
 
   return true;
 }
-

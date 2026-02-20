@@ -5,6 +5,9 @@
 #include "mathlib.h"
 #include "tgaimage.h"
 
+constexpr int width  = 64 * 8;			  
+constexpr int height = 64 * 8;
+
 constexpr TGAColor white   = {255, 255, 255, 255}; // attention, BGRA order
 constexpr TGAColor green   = {  0, 255,   0, 255};
 constexpr TGAColor red     = {  0,   0, 255, 255};
@@ -77,6 +80,34 @@ void draw_line(Point start_point, Point end_point, TGAImage &framebuffer, TGACol
     }	
 } 
 
+void draw_line(Point2f start_point, Point2f end_point, TGAImage &framebuffer, TGAColor color)
+{
+  bool steep = std::abs(start_point.x - end_point.x) < std::abs(start_point.y - end_point.y);
+  if (steep)
+    {
+      std::swap(start_point.x, start_point.y);
+      std::swap(end_point.x, end_point.y); 
+    }
+  
+  if (start_point.x > end_point.x)
+    {
+      std::swap(start_point.x, end_point.x);
+      std::swap(start_point.y, end_point.y); 
+    }
+
+  float y = start_point.y;
+  float slope = (end_point.y - start_point.y) / (end_point.x - start_point.x); 
+  for (float x = start_point.x; x < end_point.x; x++)
+    {
+      if (steep)
+	framebuffer.set((int)std::round(y), (int)std::round(x), color);
+      else 
+	framebuffer.set((int)std::round(x), (int)std::round(y), color);
+	
+      y += slope; 
+    }	
+} 
+
 void draw_line(Line line, TGAImage &framebuffer, TGAColor color)
 {
   bool steep = std::abs(line.start_point.x - line.end_point.x) < std::abs(line.start_point.y - line.end_point.y);
@@ -107,5 +138,49 @@ void draw_line(Line line, TGAImage &framebuffer, TGAColor color)
       ierror -= 2 * (line.end_point.x - line.start_point.x) * (ierror > (line.end_point.x - line.start_point.x)); 
     }	
 } 
+
+float point_ndc_x(float point)
+{
+  float ndc_x = point * 2 / width - 1;
+  return ndc_x;
+}
+
+float point_ndc_y(float point)
+{
+  float ndc_y = 1 - 2 * point / height;
+  return ndc_y;
+}
+
+Point2f screen(const Point2f &point)
+{
+  // -1..1 => (after added 1) 0..2 => (divided 2) 0..1 => (multiplied width or height)0..w/h 
+
+  return
+    {
+      (point.x + 1) / 2 * width,
+      (1 - (point.y + 1) / 2) * height
+    }; 
+}
+
+Point2f project_screen(const Point3f &point3f)
+{
+  Point2f point2f;
+  
+  float x = point3f.x / point3f.z;
+  float y = point3f.y / point3f.z;
+  
+  point2f.x = x;
+  point2f.y = y;
+
+  return point2f; 
+}
+
+Point3f translate_z(Point3f &point3f, float dz)
+{
+  point3f.z += dz;
+  return point3f; 
+}
+
+// screen => project => translate_z
 
 #endif
