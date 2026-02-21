@@ -9,7 +9,7 @@
 struct ModelBuffer
 {
   Vector3f vertices[10000];
-  Vector3i faces[30000];
+  Vector3 faces[30000];
 
   int vertex_count;
   int face_count; 

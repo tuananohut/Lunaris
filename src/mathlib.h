@@ -1,64 +1,45 @@
 #ifndef MATHLIB_H
 #define MATHLIB_H
 
-struct Point
+struct Vector2
 {
   int x;
-  int y; 
-};
+  int y;
 
-struct Point2f
-{
-  float x;
-  float y; 
-};
-
-struct Point3f
-{
-  float x;
-  float y; 
-  float z; 
-};
-
-struct Vector2f
-{
-  float x;
-  float y;
-
-  Vector2f() {}
+  Vector2() {}
   
-Vector2f(float _x, float _y) :
+Vector2(int _x, int _y) :
   x(_x), y(_y) {} 
 };
 
-struct Vector3f
-{
-  float x;
-  float y;
-  float z;
-
-  Vector3f() {}
-  
-Vector3f(float _x, float _y, float _z) :
-  x(_x), y(_y), z(_z) {} 
-};
-
-struct Vector3i
+struct Vector3
 {
   int x;
   int y;
   int z;
 
-  Vector3i() {}
+  Vector3() {}
 
-Vector3i(int _x, int _y, int _z) :
+Vector3(int _x, int _y, int _z) :
+  x(_x), y(_y), z(_z) {} 
+};
+
+struct Vector3f
+{
+  double x;
+  double y;
+  double z;
+
+  Vector3f() {}
+
+Vector3f(double _x, double _y, double _z) :
   x(_x), y(_y), z(_z) {} 
 };
 
 struct Line
 {
-  Point start_point;
-  Point end_point; 
+  Vector2 start_point;
+  Vector2 end_point; 
 }; 
 
 #endif
