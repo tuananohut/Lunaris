@@ -1,2 +1,4 @@
 build/
 vs.bat
+src/test.cpp
+run.bat

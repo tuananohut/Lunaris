@@ -6,8 +6,8 @@
 #include "model.h"
 #include "tgaimage.h"
 
-constexpr int width  = 1080;			  
-constexpr int height = 1080;
+constexpr int width  = 128;			  
+constexpr int height = 128;
 
 constexpr TGAColor white   = {255, 255, 255, 255}; // attention, BGRA order
 constexpr TGAColor green   = {  0, 255,   0, 255};
@@ -29,5 +29,8 @@ Vector2 screen(const Vector3f &point);
 Vector3f translate_z(Vector3f &point3f, float dz);
 
 void render_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAColor color);
+
+void scanline_rendering(Vector2 point1, Vector2 point2, Vector2 point3,
+			TGAImage &framebuffer, TGAColor color);
 
 #endif

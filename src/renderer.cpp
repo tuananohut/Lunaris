@@ -39,7 +39,7 @@ void draw_line(Vector2 start_point, Vector2 end_point, TGAImage &framebuffer, TG
       std::swap(start_point.x, start_point.y);
       std::swap(end_point.x, end_point.y); 
     }
-  
+   
   if (start_point.x > end_point.x)
     {
       std::swap(start_point.x, end_point.x);
@@ -97,7 +97,7 @@ void draw_line(Line line, TGAImage &framebuffer, TGAColor color)
 
 void draw_triangle(Vector2 point1, Vector2 point2, Vector2 point3,
 		   TGAImage &framebuffer, TGAColor color)
-{  
+{
   draw_line(point1, point2, framebuffer, color);
   draw_line(point2, point3, framebuffer, color);
   draw_line(point1, point3, framebuffer, color);
@@ -141,3 +141,57 @@ void render_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAColor color)
       draw_triangle(vertex0, vertex1, vertex2, framebuffer, color); 
     }
 }
+
+
+void scanline_rendering(Vector2 point1, Vector2 point2, Vector2 point3,
+			TGAImage &framebuffer, TGAColor color)
+{
+  int biggest_y = point3.y;
+
+  if (point2.y > point3.y)
+    {
+      std::swap(point2.y, point3.y);
+      std::swap(point2.x, point3.x); 
+    }
+
+  if (point1.y > point3.y)
+    {
+      std::swap(point1.y, point3.y);
+      std::swap(point1.x, point3.x); 
+    }
+
+  if (point1.y > point2.y)
+    {
+      std::swap(point1.y, point2.y);
+      std::swap(point1.x, point2.x);
+    }
+ 
+
+  int edge0_slope = (point3.y - point1.y) / (point3.x - point1.x);
+  int edge1_slope = (point2.y - point1.y) / (point2.x - point1.x);  
+
+  int left_edge, right_edge;
+
+  if (edge0_slope > 0)
+    {
+      left_edge = edge0_slope;
+      right_edge = edge1_slope; 
+    }
+
+  else if (edge1_slope > 0)
+    {
+      left_edge = edge1_slope;
+      right_edge = edge0_slope; 
+    }
+
+  int curx1 = point1.x;
+  int curx2 = point1.x; 
+   
+  for (int y = point1.y; y <= point2.y; y++)
+    {
+      draw_line(curx1, y, curx2, y, framebuffer, color);
+      curx1 += left_edge;
+      curx2 += right_edge; 
+    }
+}
+
