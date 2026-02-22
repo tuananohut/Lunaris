@@ -38,6 +38,7 @@ This project was inspired by the following resources:
 - https://haqr.eu/tinyrenderer
 - https://youtu.be/qjWkNZ0SXfo
 - https://github.com/tsoding/formula
+- Fundamentals of Computer Graphics, 4th Edition
 
 ---
 

@@ -25,7 +25,6 @@ void draw_line(int x1, int y1, int x2, int y2, TGAImage &framebuffer, TGAColor c
 	framebuffer.set(x, y, color);
 
       ierror += 2 * std::abs(y2 - y1); 
-	
       y += (y2 > y1 ? 1 : -1) * (ierror > (x2 - x1)); // Up or down ? 
       ierror -= 2 * (x2 - x1) * (ierror > (x2 - x1)); 
     }	
@@ -146,8 +145,6 @@ void render_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAColor color)
 void scanline_rendering(Vector2 point1, Vector2 point2, Vector2 point3,
 			TGAImage &framebuffer, TGAColor color)
 {
-  int biggest_y = point3.y;
-
   if (point2.y > point3.y)
     {
       std::swap(point2.y, point3.y);
@@ -165,33 +162,82 @@ void scanline_rendering(Vector2 point1, Vector2 point2, Vector2 point3,
       std::swap(point1.y, point2.y);
       std::swap(point1.x, point2.x);
     }
- 
 
-  int edge0_slope = (point3.y - point1.y) / (point3.x - point1.x);
-  int edge1_slope = (point2.y - point1.y) / (point2.x - point1.x);  
 
-  int left_edge, right_edge;
+  int dx_1 = point2.x - point1.x;
+  int dy_1 = point2.y - point1.y;
+  	 
+  int dx_2 = point3.x - point1.x;
+  int dy_2 = point3.y - point1.y;
+	 
+  int dx_3 = point3.x - point2.x;
+  int dy_3 = point3.y - point2.y;
+  
+  int ierror_1 = 0; 
+  int ierror_2 = 0;
+  int ierror_3 = 0;
 
-  if (edge0_slope > 0)
+  int step_1 = (dx_1 > 0) ? 1 : -1;
+  int step_2 = (dx_2 > 0) ? 1 : -1;
+  int step_3 = (dx_3 > 0) ? 1 : -1;
+
+  dx_1 = std::abs(dx_1);
+  dx_2 = std::abs(dx_2);
+  dx_3 = std::abs(dx_3);
+	 
+  dy_1 = std::abs(dy_1);
+  dy_2 = std::abs(dy_2);
+  dy_3 = std::abs(dy_3);
+  
+  int left_x  = point1.x;
+  int right_x = point1.x;
+  
+  for (int y = point1.y; y < point2.y; y++)
     {
-      left_edge = edge0_slope;
-      right_edge = edge1_slope; 
+      if (left_x > right_x)
+	std::swap(left_x, right_x);
+	  
+      draw_line(left_x, y, right_x, y, framebuffer, color); 
+
+      ierror_1 += dx_1;
+      while (ierror_1 >= dy_1)
+	{
+	  left_x   += step_1;
+	  ierror_1 -= dy_1;
+	}
+      
+      ierror_2 += dx_2;
+      while (ierror_2 >= dy_2)
+	{
+	  right_x  += step_2;
+	  ierror_2 -= dy_2;
+	}
     }
 
-  else if (edge1_slope > 0)
-    {
-      left_edge = edge1_slope;
-      right_edge = edge0_slope; 
-    }
+  left_x = point2.x;
+  ierror_3 = 0;
 
-  int curx1 = point1.x;
-  int curx2 = point1.x; 
-   
-  for (int y = point1.y; y <= point2.y; y++)
+  for (int y = point2.y; y <= point3.y; y++)
     {
-      draw_line(curx1, y, curx2, y, framebuffer, color);
-      curx1 += left_edge;
-      curx2 += right_edge; 
+      if (left_x > right_x)
+	std::swap(left_x, right_x);
+
+      draw_line(left_x, y, right_x, y, framebuffer, color);
+
+      ierror_3 += dx_3;
+      while (ierror_3 >= dy_3)
+	{
+	  left_x   += step_3;
+	  ierror_3 -= dy_3;
+	}
+
+      ierror_2 += dx_2;
+      while (ierror_2 >= dy_2)
+	{
+	  right_x  += step_2;
+	  ierror_2 -= dy_2;
+	}
     }
 }
 
+ 

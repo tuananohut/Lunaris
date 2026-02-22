@@ -18,7 +18,11 @@ int main(int argc, char** argv)
 
   draw_triangle({115, 83}, {80, 90}, {85, 120}, framebuffer, grey);
 
-  scanline_rendering({115, 83}, {80, 90}, {85, 120}, framebuffer, green);
+  scanline_rendering({7, 45}, {35, 100}, {45, 60}, framebuffer, pink);
+  
+  scanline_rendering({120, 35}, {90, 5}, {45, 110}, framebuffer, purple);
+
+  scanline_rendering({115, 83}, {80, 90}, {85, 120}, framebuffer, grey);
   
   framebuffer.write_tga_file("framebuffer.tga");
   
