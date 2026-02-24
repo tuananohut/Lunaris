@@ -39,6 +39,7 @@ This project was inspired by the following resources:
 - https://youtu.be/qjWkNZ0SXfo
 - https://github.com/tsoding/formula
 - Fundamentals of Computer Graphics, 4th Edition
+- https://youtu.be/k5wtuKWmV48?si=P_Gl9xOSfxl6Rap3
 
 ---
 

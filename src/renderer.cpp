@@ -163,81 +163,55 @@ void scanline_rendering(Vector2 point1, Vector2 point2, Vector2 point3,
       std::swap(point1.x, point2.x);
     }
 
+  int total_height = point3.y - point1.y;
 
-  int dx_1 = point2.x - point1.x;
-  int dy_1 = point2.y - point1.y;
-  	 
-  int dx_2 = point3.x - point1.x;
-  int dy_2 = point3.y - point1.y;
-	 
-  int dx_3 = point3.x - point2.x;
-  int dy_3 = point3.y - point2.y;
-  
-  int ierror_1 = 0; 
-  int ierror_2 = 0;
-  int ierror_3 = 0;
-
-  int step_1 = (dx_1 > 0) ? 1 : -1;
-  int step_2 = (dx_2 > 0) ? 1 : -1;
-  int step_3 = (dx_3 > 0) ? 1 : -1;
-
-  dx_1 = std::abs(dx_1);
-  dx_2 = std::abs(dx_2);
-  dx_3 = std::abs(dx_3);
-	 
-  dy_1 = std::abs(dy_1);
-  dy_2 = std::abs(dy_2);
-  dy_3 = std::abs(dy_3);
-  
-  int left_x  = point1.x;
-  int right_x = point1.x;
-  
-  for (int y = point1.y; y < point2.y; y++)
+  if (point1.y != point2.y)
     {
-      if (left_x > right_x)
-	std::swap(left_x, right_x);
-	  
-      draw_line(left_x, y, right_x, y, framebuffer, color); 
-
-      ierror_1 += dx_1;
-      while (ierror_1 >= dy_1)
+      int segment_height = point2.y - point1.y;
+      for (int y = point1.y; y <= point2.y; y++)
 	{
-	  left_x   += step_1;
-	  ierror_1 -= dy_1;
-	}
-      
-      ierror_2 += dx_2;
-      while (ierror_2 >= dy_2)
-	{
-	  right_x  += step_2;
-	  ierror_2 -= dy_2;
+	  int x1 = point1.x + ((point3.x - point1.x) * (y - point1.y)) / total_height; 
+	  int x2 = point1.x + ((point2.x - point1.x) * (y - point1.y)) / segment_height;
+	  for (int x = std::min(x1, x2); x < std::max(x1, x2); x++)
+	    framebuffer.set(x, y, color);
 	}
     }
 
-  left_x = point2.x;
-  ierror_3 = 0;
-
-  for (int y = point2.y; y <= point3.y; y++)
+  if (point2.y != point3.y)
     {
-      if (left_x > right_x)
-	std::swap(left_x, right_x);
-
-      draw_line(left_x, y, right_x, y, framebuffer, color);
-
-      ierror_3 += dx_3;
-      while (ierror_3 >= dy_3)
+      int segment_height = point3.y - point2.y;
+      for (int y = point2.y; y <= point3.y; y++)
 	{
-	  left_x   += step_3;
-	  ierror_3 -= dy_3;
-	}
-
-      ierror_2 += dx_2;
-      while (ierror_2 >= dy_2)
-	{
-	  right_x  += step_2;
-	  ierror_2 -= dy_2;
+	  int x1 = point1.x + ((point3.x - point1.x) * (y - point1.y)) / total_height; 
+	  int x2 = point2.x + ((point3.x - point2.x) * (y - point2.y)) / segment_height;
+	  for (int x = std::min(x1, x2); x < std::max(x1, x2); x++)
+	    framebuffer.set(x, y, color);
 	}
     }
 }
 
- 
+
+void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer)
+{
+  for (int i = 0; i < buffer.face_count; i++)
+    {
+      Vector3 face = buffer.faces[i];
+
+      Vector2 vertex0 = screen(buffer.vertices[face.x]);   
+      Vector2 vertex1 = screen(buffer.vertices[face.y]);   
+      Vector2 vertex2 =	screen(buffer.vertices[face.z]);
+
+      TGAColor rnd;
+      for (int c = 0; c < 3; c++)
+	rnd[c] = std::rand()%255;
+
+      scanline_rendering(vertex0, vertex1, vertex2, framebuffer, rnd); 
+    }
+}
+
+void rasterize(Vector2 points[3], TGAImage &framebuffer, TGAColor color)
+{
+  
+}
+
+
