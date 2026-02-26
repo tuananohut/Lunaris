@@ -173,7 +173,9 @@ void scanline_rendering(Vector2 point1, Vector2 point2, Vector2 point3,
 	  int x1 = point1.x + ((point3.x - point1.x) * (y - point1.y)) / total_height; 
 	  int x2 = point1.x + ((point2.x - point1.x) * (y - point1.y)) / segment_height;
 	  for (int x = std::min(x1, x2); x < std::max(x1, x2); x++)
-	    framebuffer.set(x, y, color);
+	    {
+	      framebuffer.set(x, y, color);
+	    }
 	}
     }
 
@@ -185,7 +187,9 @@ void scanline_rendering(Vector2 point1, Vector2 point2, Vector2 point3,
 	  int x1 = point1.x + ((point3.x - point1.x) * (y - point1.y)) / total_height; 
 	  int x2 = point2.x + ((point3.x - point2.x) * (y - point2.y)) / segment_height;
 	  for (int x = std::min(x1, x2); x < std::max(x1, x2); x++)
-	    framebuffer.set(x, y, color);
+	    {
+	      framebuffer.set(x, y, color);
+	    }
 	}
     }
 }
@@ -209,9 +213,24 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer)
     }
 }
 
-void rasterize(Vector2 points[3], TGAImage &framebuffer, TGAColor color)
+
+
+void aabb(Vector2 point1, Vector2 point2, Vector2 point3,
+	  TGAImage &framebuffer, TGAColor color)
 {
-  
+  int bbminx = std::min(std::min(point1.x, point2.x), point3.x); 
+  int bbminy = std::min(std::min(point1.y, point2.y), point3.y);
+  int bbmaxx = std::max(std::max(point1.x, point2.x), point3.x);
+  int bbmaxy = std::max(std::max(point1.y, point2.y), point3.y); 
+
+  #pragma omp parallel for
+  for (int x = bbminx; x <= bbmaxx; x++)
+    {
+      for (int y = bbminy; y <= bbmaxy; y++)
+	{
+	  framebuffer.set(x, y, color); 
+	}
+    }
 }
 
 

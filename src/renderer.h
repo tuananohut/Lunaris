@@ -34,6 +34,7 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer);
 void scanline_rendering(Vector2 point1, Vector2 point2, Vector2 point3,
 			TGAImage &framebuffer, TGAColor color);
 
-void rasterize(Vector2 points[3], TGAImage &framebuffer, TGAColor color);
+void aabb(Vector2 point1, Vector2 point2, Vector2 point3,
+	  TGAImage &framebuffer, TGAColor color);
 
 #endif
