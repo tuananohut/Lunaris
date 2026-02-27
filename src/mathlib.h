@@ -40,6 +40,6 @@ struct Line
 {
   Vector2 start_point;
   Vector2 end_point; 
-}; 
+};
 
 #endif

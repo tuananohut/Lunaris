@@ -209,25 +209,43 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer)
       for (int c = 0; c < 3; c++)
 	rnd[c] = std::rand()%255;
 
-      scanline_rendering(vertex0, vertex1, vertex2, framebuffer, rnd); 
+      fill_triangle(vertex0, vertex1, vertex2, framebuffer, rnd); 
     }
 }
 
 
+double signed_triangle_area(Vector2 point1, Vector2 point2, Vector2 point3)
+{
+  return .5 * ((point2.y - point1.y)*(point2.x + point1.x) +
+	       (point3.y - point2.y)*(point3.x + point2.x) +
+	       (point1.y - point3.y)*(point1.x + point3.x));
+}
 
-void aabb(Vector2 point1, Vector2 point2, Vector2 point3,
-	  TGAImage &framebuffer, TGAColor color)
+
+void fill_triangle(Vector2 point1, Vector2 point2, Vector2 point3,
+		   TGAImage &framebuffer, TGAColor color)
 {
   int bbminx = std::min(std::min(point1.x, point2.x), point3.x); 
   int bbminy = std::min(std::min(point1.y, point2.y), point3.y);
   int bbmaxx = std::max(std::max(point1.x, point2.x), point3.x);
   int bbmaxy = std::max(std::max(point1.y, point2.y), point3.y); 
-
+  double total_area = signed_triangle_area(point1, point2, point3);
+  if (total_area < 1)
+    return; // backface culling + discarding triangles that cover less than a pixel
+  
   #pragma omp parallel for
   for (int x = bbminx; x <= bbmaxx; x++)
     {
       for (int y = bbminy; y <= bbmaxy; y++)
 	{
+	  Vector2 point = {x, y};
+	  double alpha = signed_triangle_area(point, point2, point3) / total_area; 
+	  double beta  = signed_triangle_area(point, point3, point1) / total_area; 
+	  double gamma = signed_triangle_area(point, point1, point2) / total_area; 
+
+	  if (alpha < 0 || beta < 0 || gamma < 0)
+	    continue; 
+	  
 	  framebuffer.set(x, y, color); 
 	}
     }

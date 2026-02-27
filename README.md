@@ -28,6 +28,8 @@ This project is currently a work in progress.
 - No external graphics API
 - CPU-based rendering
 - OBJ model loading
+- Rasterization
+- Backface culling
 
 ---
 

@@ -13,16 +13,16 @@ int main(int argc, char** argv)
     }
 
 
-  // ModelBuffer *buffer = new ModelBuffer();
+  ModelBuffer *buffer = new ModelBuffer();
   // const char *model_filename = "../obj/african_head/african_head.obj";
   // const char *model_filename = "../obj/diablo3_pose/diablo3_pose.obj";
-  // const char *model_filename = "../obj/bunny.obj";
+  const char *model_filename = "../obj/bunny.obj";
   // const char *model_filename = "../obj/penger.obj";
   // const char *model_filename = "../obj/teapot.obj";
 
-  // object_to_render(model_filename, *buffer);
+  object_to_render(model_filename, *buffer);
 
-  // rasterize_model(*buffer, framebuffer);  
+  rasterize_model(*buffer, framebuffer);  
 
   /*
   draw_triangle({7, 45}, {35, 100}, {45, 60}, framebuffer, pink);
@@ -36,9 +36,13 @@ int main(int argc, char** argv)
   scanline_rendering({120, 35}, {90, 5}, {45, 110}, framebuffer, purple);
 
   scanline_rendering({115, 83}, {80, 90}, {85, 120}, framebuffer, grey);
-  */
+  
+  fill_triangle({7, 45}, {35, 100}, {45, 60}, framebuffer, pink);
 
-  aabb({115, 83}, {80, 90}, {85, 120}, framebuffer, grey);
+  fill_triangle({120, 35}, {90, 5}, {45, 110}, framebuffer, purple);
+
+  fill_triangle({115, 83}, {80, 90}, {85, 120}, framebuffer, grey);
+  */
   
   framebuffer.write_tga_file("framebuffer.tga");
   
