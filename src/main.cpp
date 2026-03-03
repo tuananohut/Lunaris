@@ -22,7 +22,7 @@ int main(int argc, char** argv)
 
   object_to_render(model_filename, *buffer);
 
-  rasterize_model(*buffer, framebuffer);  
+  // rasterize_model(*buffer, framebuffer);  
 
   /*
   draw_triangle({7, 45}, {35, 100}, {45, 60}, framebuffer, pink);
@@ -43,6 +43,9 @@ int main(int argc, char** argv)
 
   fill_triangle({115, 83}, {80, 90}, {85, 120}, framebuffer, grey);
   */
+
+  fill_triangle({17, 4, 13}, {55, 39, 128}, {23, 59, 255}, framebuffer, grey);
+
   
   framebuffer.write_tga_file("framebuffer.tga");
   

@@ -25,6 +25,8 @@ void draw_line(Line line, TGAImage &framebuffer, TGAColor color);
 
 void draw_triangle(Vector2 point1, Vector2 point2, Vector2 point3, TGAImage &framebuffer, TGAColor color);
 
+double signed_triangle_area(Vector3 point1, Vector3 point2, Vector3 point3);
+
 Vector2 screen(const Vector3f &point); 
 Vector3f translate_z(Vector3f &point3f, float dz);
 
@@ -35,6 +37,8 @@ void scanline_rendering(Vector2 point1, Vector2 point2, Vector2 point3,
 			TGAImage &framebuffer, TGAColor color);
 
 void fill_triangle(Vector2 point1, Vector2 point2, Vector2 point3,
+		   TGAImage &framebuffer, TGAColor color);
+void fill_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
 		   TGAImage &framebuffer, TGAColor color);
 
 #endif
