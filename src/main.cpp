@@ -2,7 +2,7 @@
 
 int main(int argc, char** argv)
 {  
-  TGAImage framebuffer(width, height, TGAImage::RGB);
+  TGAImage framebuffer(width, height, TGAImage::RGBA);
   
   for (size_t i = 0; i < width; ++i)
     {
@@ -11,7 +11,7 @@ int main(int argc, char** argv)
 	  framebuffer.set(i, j, navy); 
 	}
     }
-
+  
 
   ModelBuffer *buffer = new ModelBuffer();
   // const char *model_filename = "../obj/african_head/african_head.obj";

@@ -2,12 +2,11 @@
 #define RENDERER_H
 
 #include <cmath>
-#include "mathlib.h"
 #include "model.h"
 #include "tgaimage.h"
 
-constexpr int width  = 1080;			  
-constexpr int height = 1080;
+constexpr int width  = 180;			  
+constexpr int height = 180;
 
 constexpr TGAColor white   = {255, 255, 255, 255}; // attention, BGRA order
 constexpr TGAColor green   = {  0, 255,   0, 255};
@@ -19,13 +18,53 @@ constexpr TGAColor navy    = { 61,  23,  21, 255};
 constexpr TGAColor purple  = {152,  37, 152, 255};
 constexpr TGAColor grey    = {233, 233, 241, 255};
 
+#ifndef ML_VECTOR2_TYPE
+#define ML_VECTOR2_TYPE
+struct Vector2
+{
+  int x;
+  int y;
+
+  Vector2() {}
+  
+Vector2(int _x, int _y) :
+  x(_x), y(_y) {} 
+};
+#endif
+
+#ifndef ML_VECTOR3_TYPE
+#define ML_VECTOR3_TYPE
+struct Vector3
+{
+  int x;
+  int y;
+  int z;
+
+  Vector3() {}
+
+Vector3(int _x, int _y, int _z) :
+  x(_x), y(_y), z(_z) {} 
+};
+#endif 
+
+#ifndef LINE_TYPE
+#define LINE_TYPE
+struct Line
+{
+  Vector2 start_point;
+  Vector2 end_point; 
+};
+#endif 
+
 void draw_line(int x1, int y1, int x2, int y2, TGAImage &framebuffer, TGAColor color);
 void draw_line(Vector2 start_point, Vector2 end_point, TGAImage &framebuffer, TGAColor color);
 void draw_line(Line line, TGAImage &framebuffer, TGAColor color);
 
 void draw_triangle(Vector2 point1, Vector2 point2, Vector2 point3, TGAImage &framebuffer, TGAColor color);
 
+double signed_triangle_area(Vector2 point1, Vector2 point2, Vector2 point3);
 double signed_triangle_area(Vector3 point1, Vector3 point2, Vector3 point3);
+int signed_triangle_area(Vector3 point1, Vector3 point2, Vector3 point3);
 
 Vector2 screen(const Vector3f &point); 
 Vector3f translate_z(Vector3f &point3f, float dz);
