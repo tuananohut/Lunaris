@@ -2,7 +2,7 @@
 
 int main(int argc, char** argv)
 {  
-  TGAImage framebuffer(width, height, TGAImage::RGBA);
+  TGAImage framebuffer(width, height, TGAImage::RGB);
   
   for (size_t i = 0; i < width; ++i)
     {
@@ -44,7 +44,12 @@ int main(int argc, char** argv)
   fill_triangle({115, 83}, {80, 90}, {85, 120}, framebuffer, grey);
   */
 
-  fill_triangle({17, 4, 13}, {55, 39, 128}, {23, 59, 255}, framebuffer, grey);
+  // fill_triangle({17, 4, 13}, {55, 39, 128}, {23, 59, 255}, framebuffer, grey);
+
+
+  fill_triangle({17, 4, 13}, {55, 39, 128}, {23, 59, 255},
+		{0, 0, 255}, {255, 255, 0}, {255, 0, 255},
+		framebuffer, grey);
 
   
   framebuffer.write_tga_file("framebuffer.tga");
