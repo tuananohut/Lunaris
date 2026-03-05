@@ -320,22 +320,11 @@ void fill_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
 
 	  if (alpha < 0 || beta < 0 || gamma < 0)
 	    continue;
-	  
-	  if (alpha > 0.75 || beta > 0.75 || gamma > 0.50)
-	    {	      
-	      color[0] = 0;
-	      color[1] = 0;
-	      color[2] = 0;
-	      color[3] = 255;
-	    }
-	  
-	  else
-	    {
-	      color[0] = static_cast<unsigned char>(alpha * colorA.x + beta * colorB.x + gamma * colorC.x);
-	      color[1] = static_cast<unsigned char>(alpha * colorA.y + beta * colorB.y + gamma * colorC.y);
-	      color[2] = static_cast<unsigned char>(alpha * colorA.z + beta * colorB.z + gamma * colorC.z);
-	      color[3] = 255;
-	    }
+
+	  color[0] = static_cast<unsigned char>(alpha * colorA.x + beta * colorB.x + gamma * colorC.x);
+	  color[1] = static_cast<unsigned char>(alpha * colorA.y + beta * colorB.y + gamma * colorC.y);
+	  color[2] = static_cast<unsigned char>(alpha * colorA.z + beta * colorB.z + gamma * colorC.z);
+	  color[3] = 255;	    
 	  
 	  framebuffer.set(x, y, color);
 	}
