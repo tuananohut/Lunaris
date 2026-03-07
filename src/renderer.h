@@ -43,6 +43,6 @@ void fill_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
 		   TGAImage &framebuffer, TGAColor color);
 void fill_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
 		   Vector3 colorA, Vector3 colorB, Vector3 colorC, 
-		   TGAImage &framebuffer, TGAColor color);
+		   TGAImage &framebuffer);
 
 #endif

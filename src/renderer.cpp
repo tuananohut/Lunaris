@@ -20,9 +20,9 @@ void draw_line(int x1, int y1, int x2, int y2, TGAImage &framebuffer, TGAColor c
   for (int x = x1; x < x2; x++)
     {
       if (steep)
-	framebuffer.set(y, x, color);
+        framebuffer.set(y, x, color);
       else 
-	framebuffer.set(x, y, color);
+        framebuffer.set(x, y, color);
 
       ierror += 2 * std::abs(y2 - y1); 
       y += (y2 > y1 ? 1 : -1) * (ierror > (x2 - x1)); // Up or down ? 
@@ -50,9 +50,9 @@ void draw_line(Vector2 start_point, Vector2 end_point, TGAImage &framebuffer, TG
   for (int x = start_point.x; x < end_point.x; x++)
     {
       if (steep)
-	framebuffer.set(y, x, color);
+        framebuffer.set(y, x, color);
       else 
-	framebuffer.set(x, y, color);
+        framebuffer.set(x, y, color);
 
       ierror += 2 * std::abs(end_point.y - start_point.y); 
 	
@@ -81,9 +81,9 @@ void draw_line(Line line, TGAImage &framebuffer, TGAColor color)
   for (int x = line.start_point.x; x < line.end_point.x; x++)
     {
       if (steep)
-	framebuffer.set(y, x, color);
+        framebuffer.set(y, x, color);
       else 
-	framebuffer.set(x, y, color);
+        framebuffer.set(x, y, color);
 
       ierror += 2 * std::abs(line.end_point.y - line.start_point.y); 
 	
@@ -95,7 +95,7 @@ void draw_line(Line line, TGAImage &framebuffer, TGAColor color)
 
 
 void draw_triangle(Vector2 point1, Vector2 point2, Vector2 point3,
-		   TGAImage &framebuffer, TGAColor color)
+                   TGAImage &framebuffer, TGAColor color)
 {
   draw_line(point1, point2, framebuffer, color);
   draw_line(point2, point3, framebuffer, color);
@@ -143,7 +143,7 @@ void render_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAColor color)
 
 
 void scanline_rendering(Vector2 point1, Vector2 point2, Vector2 point3,
-			TGAImage &framebuffer, TGAColor color)
+                        TGAImage &framebuffer, TGAColor color)
 {
   if (point2.y > point3.y)
     {
@@ -169,28 +169,28 @@ void scanline_rendering(Vector2 point1, Vector2 point2, Vector2 point3,
     {
       int segment_height = point2.y - point1.y;
       for (int y = point1.y; y <= point2.y; y++)
-	{
-	  int x1 = point1.x + ((point3.x - point1.x) * (y - point1.y)) / total_height; 
-	  int x2 = point1.x + ((point2.x - point1.x) * (y - point1.y)) / segment_height;
-	  for (int x = std::min(x1, x2); x < std::max(x1, x2); x++)
-	    {
-	      framebuffer.set(x, y, color);
-	    }
-	}
+        {
+          int x1 = point1.x + ((point3.x - point1.x) * (y - point1.y)) / total_height; 
+          int x2 = point1.x + ((point2.x - point1.x) * (y - point1.y)) / segment_height;
+          for (int x = std::min(x1, x2); x < std::max(x1, x2); x++)
+            {
+              framebuffer.set(x, y, color);
+            }
+        }
     }
 
   if (point2.y != point3.y)
     {
       int segment_height = point3.y - point2.y;
       for (int y = point2.y; y <= point3.y; y++)
-	{
-	  int x1 = point1.x + ((point3.x - point1.x) * (y - point1.y)) / total_height; 
-	  int x2 = point2.x + ((point3.x - point2.x) * (y - point2.y)) / segment_height;
-	  for (int x = std::min(x1, x2); x < std::max(x1, x2); x++)
-	    {
-	      framebuffer.set(x, y, color);
-	    }
-	}
+        {
+          int x1 = point1.x + ((point3.x - point1.x) * (y - point1.y)) / total_height; 
+          int x2 = point2.x + ((point3.x - point2.x) * (y - point2.y)) / segment_height;
+          for (int x = std::min(x1, x2); x < std::max(x1, x2); x++)
+            {
+              framebuffer.set(x, y, color);
+            }
+        }
     }
 }
 
@@ -207,7 +207,7 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer)
 
       TGAColor rnd;
       for (int c = 0; c < 3; c++)
-	rnd[c] = std::rand()%255;
+        rnd[c] = std::rand()%255;
 
       fill_triangle(vertex0, vertex1, vertex2, framebuffer, rnd); 
     }
@@ -217,19 +217,19 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer)
 double signed_triangle_area(Vector2 point1, Vector2 point2, Vector2 point3)
 {
   return .5 * ((point2.y - point1.y)*(point2.x + point1.x) +
-	       (point3.y - point2.y)*(point3.x + point2.x) +
-	       (point1.y - point3.y)*(point1.x + point3.x));
+               (point3.y - point2.y)*(point3.x + point2.x) +
+               (point1.y - point3.y)*(point1.x + point3.x));
 }
 
 double signed_triangle_area(Vector3 point1, Vector3 point2, Vector3 point3)
 {
   return .5 * ((point2.y - point1.y)*(point2.x + point1.x) +
-	       (point3.y - point2.y)*(point3.x + point2.x) +
-	       (point1.y - point3.y)*(point1.x + point3.x));
+               (point3.y - point2.y)*(point3.x + point2.x) +
+               (point1.y - point3.y)*(point1.x + point3.x));
 }
 
 void fill_triangle(Vector2 point1, Vector2 point2, Vector2 point3,
-		   TGAImage &framebuffer, TGAColor color)
+                   TGAImage &framebuffer, TGAColor color)
 {
   int bbminx = std::min(std::min(point1.x, point2.x), point3.x); 
   int bbminy = std::min(std::min(point1.y, point2.y), point3.y);
@@ -239,26 +239,26 @@ void fill_triangle(Vector2 point1, Vector2 point2, Vector2 point3,
   if (total_area < 1)
     return; // backface culling + discarding triangles that cover less than a pixel
   
-  #pragma omp parallel for
+#pragma omp parallel for
   for (int x = bbminx; x <= bbmaxx; x++)
     {
       for (int y = bbminy; y <= bbmaxy; y++)
-	{
-	  Vector2 point = {x, y};
-	  double alpha = signed_triangle_area(point, point2, point3) / total_area; 
-	  double beta  = signed_triangle_area(point, point3, point1) / total_area; 
-	  double gamma = signed_triangle_area(point, point1, point2) / total_area; 
+        {
+          Vector2 point = {x, y};
+          double alpha = signed_triangle_area(point, point2, point3) / total_area; 
+          double beta  = signed_triangle_area(point, point3, point1) / total_area; 
+          double gamma = signed_triangle_area(point, point1, point2) / total_area; 
 
-	  if (alpha < 0 || beta < 0 || gamma < 0)
-	    continue; 
+          if (alpha < 0 || beta < 0 || gamma < 0)
+            continue; 
 
-	  framebuffer.set(x, y, color); 
-	}
+          framebuffer.set(x, y, color); 
+        }
     }
 }
 
 void fill_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
-		   TGAImage &framebuffer, TGAColor color)
+                   TGAImage &framebuffer, TGAColor color)
 {
   int bbminx = std::min(std::min(point1.x, point2.x), point3.x); 
   int bbminy = std::min(std::min(point1.y, point2.y), point3.y);
@@ -267,34 +267,38 @@ void fill_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
 
   bbminx = std::max(0, bbminx);
   bbmaxx = std::min(width-1, bbmaxx);
+  bbminy = std::max(0, bbminy);
+  bbmaxy = std::min(height-1, bbmaxy);
   
   double total_area = signed_triangle_area(point1, point2, point3);
   if (total_area < 1)
     return; // backface culling + discarding triangles that cover less than a pixel
 
   int z = 0; 
-  #pragma omp parallel for
+#pragma omp parallel for
   for (int x = bbminx; x <= bbmaxx; x++)
     {
       for (int y = bbminy; y <= bbmaxy; y++)
-	{
-	  Vector3 point = {x, y, z};
-	  double alpha = signed_triangle_area(point, point2, point3) / total_area; 
-	  double beta  = signed_triangle_area(point, point3, point1) / total_area; 
-	  double gamma = signed_triangle_area(point, point1, point2) / total_area; 
+        {
+          Vector3 point = {x, y, z};
+          double alpha = signed_triangle_area(point, point2, point3) / total_area; 
+          double beta  = signed_triangle_area(point, point3, point1) / total_area; 
+          double gamma = signed_triangle_area(point, point1, point2) / total_area; 
 
-	  if (alpha < 0 || beta < 0 || gamma < 0)
-	    continue;
+          if (alpha < 0 || beta < 0 || gamma < 0)
+            continue;
 	  
-	  framebuffer.set(x, y, color);
-	}
+          framebuffer.set(x, y, color);
+        }
     }
 }
 
 void fill_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
-		   Vector3 colorA, Vector3 colorB, Vector3 colorC, 
-		   TGAImage &framebuffer, TGAColor color)
+                   Vector3 colorA, Vector3 colorB, Vector3 colorC, 
+                   TGAImage &framebuffer)
 {
+  TGAColor color; 
+  
   int bbminx = std::min(std::min(point1.x, point2.x), point3.x); 
   int bbminy = std::min(std::min(point1.y, point2.y), point3.y);
   int bbmaxx = std::max(std::max(point1.x, point2.x), point3.x);
@@ -302,31 +306,32 @@ void fill_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
 
   bbminx = std::max(0, bbminx);
   bbmaxx = std::min(width-1, bbmaxx);
+  bbminy = std::max(0, bbminy);
+  bbmaxy = std::min(height-1, bbmaxy);
   
   double total_area = signed_triangle_area(point1, point2, point3);
   if (total_area < 1)
     return; // backface culling + discarding triangles that cover less than a pixel
   
   int z = 0; 
-  #pragma omp parallel for
+#pragma omp parallel for
   for (int x = bbminx; x <= bbmaxx; x++)
     {
       for (int y = bbminy; y <= bbmaxy; y++)
-	{
-	  Vector3 point = {x, y, z};
-	  double alpha = signed_triangle_area(point, point2, point3) / total_area; 
-	  double beta  = signed_triangle_area(point, point3, point1) / total_area; 
-	  double gamma = signed_triangle_area(point, point1, point2) / total_area; 
+        {
+          Vector3 point = {x, y, z};
+          double alpha = signed_triangle_area(point, point2, point3) / total_area; 
+          double beta  = signed_triangle_area(point, point3, point1) / total_area; 
+          double gamma = signed_triangle_area(point, point1, point2) / total_area; 
 
-	  if (alpha < 0 || beta < 0 || gamma < 0)
-	    continue;
-
-	  color[0] = static_cast<unsigned char>(alpha * colorA.x + beta * colorB.x + gamma * colorC.x);
-	  color[1] = static_cast<unsigned char>(alpha * colorA.y + beta * colorB.y + gamma * colorC.y);
-	  color[2] = static_cast<unsigned char>(alpha * colorA.z + beta * colorB.z + gamma * colorC.z);
-	  color[3] = 255;	    
-	  
-	  framebuffer.set(x, y, color);
-	}
+          if (alpha < 0 || beta < 0 || gamma < 0)
+            continue;
+          
+          color[0] = static_cast<unsigned char>(alpha * colorA.x + beta * colorB.x + gamma * colorC.x);
+          color[1] = static_cast<unsigned char>(alpha * colorA.y + beta * colorB.y + gamma * colorC.y);
+          color[2] = static_cast<unsigned char>(alpha * colorA.z + beta * colorB.z + gamma * colorC.z);
+            
+          framebuffer.set(x, y, color);
+        }
     }
 }
