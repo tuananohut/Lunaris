@@ -3,6 +3,7 @@
 int main(int argc, char** argv)
 {  
   TGAImage framebuffer(width, height, TGAImage::RGB);
+  TGAImage zbuffer(width, height, TGAImage::GRAYSCALE);
   
   for (size_t i = 0; i < width; ++i)
     {
@@ -14,15 +15,15 @@ int main(int argc, char** argv)
   
 
   ModelBuffer *buffer = new ModelBuffer();
-  // const char *model_filename = "../obj/african_head/african_head.obj";
+  const char *model_filename = "../obj/african_head/african_head.obj";
   // const char *model_filename = "../obj/diablo3_pose/diablo3_pose.obj";
-  const char *model_filename = "../obj/bunny.obj";
+  // const char *model_filename = "../obj/bunny.obj";
   // const char *model_filename = "../obj/penger.obj";
   // const char *model_filename = "../obj/teapot.obj";
 
   object_to_render(model_filename, *buffer);
 
-  // rasterize_model(*buffer, framebuffer);  
+  rasterize_model(*buffer, framebuffer, zbuffer);  
 
   /*
     draw_triangle({7, 45}, {35, 100}, {45, 60}, framebuffer, pink);
@@ -47,12 +48,13 @@ int main(int argc, char** argv)
   // fill_triangle({17, 4, 13}, {55, 39, 128}, {23, 59, 255}, framebuffer, grey);
 
 
-  fill_triangle({17, 4, 13}, {55, 39, 128}, {23, 59, 255},
-                {0, 0, 255}, {255, 255, 0}, {255, 0, 255},
-                framebuffer);
+   // fill_triangle({17, 4, 13}, {55, 39, 128}, {23, 59, 255},
+   //              {0, 0, 255}, {255, 255, 0}, {255, 0, 255},
+   //              framebuffer);
 
 
   framebuffer.write_tga_file("framebuffer.tga");
-
+  zbuffer.write_tga_file("zbuffer.tga");
+  
   return 0;
 }

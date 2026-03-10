@@ -6,8 +6,8 @@
 #include "tgaimage.h"
 #include "mathlib.h"
 
-constexpr int width  = 180;			  
-constexpr int height = 180;
+constexpr int width  = 1080;			  
+constexpr int height = 1080;
 
 constexpr TGAColor white   = {255, 255, 255, 255}; // attention, BGRA order
 constexpr TGAColor green   = {  0, 255,   0, 255};
@@ -28,11 +28,11 @@ void draw_triangle(Vector2 point1, Vector2 point2, Vector2 point3, TGAImage &fra
 double signed_triangle_area(Vector2 point1, Vector2 point2, Vector2 point3);
 double signed_triangle_area(Vector3 point1, Vector3 point2, Vector3 point3);
 
-Vector2 screen(const Vector3f &point); 
+Vector3 screen(const Vector3f &point); 
 Vector3f translate_z(Vector3f &point3f, float dz);
 
 void render_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAColor color);
-void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer);
+void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAImage &zbuffer);
 
 void scanline_rendering(Vector2 point1, Vector2 point2, Vector2 point3,
 			TGAImage &framebuffer, TGAColor color);
@@ -40,7 +40,7 @@ void scanline_rendering(Vector2 point1, Vector2 point2, Vector2 point3,
 void fill_triangle(Vector2 point1, Vector2 point2, Vector2 point3,
 		   TGAImage &framebuffer, TGAColor color);
 void fill_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
-		   TGAImage &framebuffer, TGAColor color);
+                   TGAImage &framebuffer, TGAImage& zbuffer, TGAColor color);
 void fill_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
 		   Vector3 colorA, Vector3 colorB, Vector3 colorC, 
 		   TGAImage &framebuffer);

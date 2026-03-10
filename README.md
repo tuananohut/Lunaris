@@ -10,6 +10,8 @@ This renderer demonstrates how modern GPUs work internally by reproducing their 
 
 ## Screenshots
 
+### Wireframe
+
 ![African Head](images/african_head.png)
 
 ![Bunny](images/bunny.png)
@@ -17,6 +19,16 @@ This renderer demonstrates how modern GPUs work internally by reproducing their 
 ![Penger](images/penger.png)
 
 ![Teapot](images/teapot.png)
+
+### Rasterization
+
+![African Head](images/rasterization_african_head.png)
+                       
+![Bunny](images/rasterization_bunny.png)
+
+![Penger](images/rasterization_penger.png)
+
+![Teapot](images/rasterization_teapot.png)
 
 ---
 
