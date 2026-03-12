@@ -30,65 +30,65 @@ void draw_line(int x1, int y1, int x2, int y2, TGAImage &framebuffer, TGAColor c
     }	
 } 
 
-void draw_line(Vector2 start_point, Vector2 end_point, TGAImage &framebuffer, TGAColor color)
+void draw_line(Vector2 p0, Vector2 p1, TGAImage &framebuffer, TGAColor color)
 {
-  bool steep = std::abs(start_point.x - end_point.x) < std::abs(start_point.y - end_point.y);
+  bool steep = std::abs(p0.c[X] - p1.c[X]) < std::abs(p0.c[Y] - p1.c[Y]);
   if (steep)
     {
-      std::swap(start_point.x, start_point.y);
-      std::swap(end_point.x, end_point.y); 
+      std::swap(p0.c[X], p0.c[Y]);
+      std::swap(p1.c[X], p1.c[Y]); 
     }
    
-  if (start_point.x > end_point.x)
+  if (p0.c[X] > p1.c[X])
     {
-      std::swap(start_point.x, end_point.x);
-      std::swap(start_point.y, end_point.y); 
+      std::swap(p0.c[X], p1.c[X]);
+      std::swap(p0.c[Y], p1.c[Y]); 
     }
 
-  int y = start_point.y;
+  int y = p0.c[Y];
   int ierror = 0; 
-  for (int x = start_point.x; x < end_point.x; x++)
+  for (int x = p0.c[X]; x < p1.c[X]; x++)
     {
       if (steep)
         framebuffer.set(y, x, color);
       else 
         framebuffer.set(x, y, color);
 
-      ierror += 2 * std::abs(end_point.y - start_point.y); 
+      ierror += 2 * std::abs(p1.c[Y] - p0.c[Y]); 
 	
-      y += (end_point.y > start_point.y ? 1 : -1) * (ierror > (end_point.x - start_point.x)); // Up or down ? 
-      ierror -= 2 * (end_point.x - start_point.x) * (ierror > (end_point.x - start_point.x)); 
+      y += (p1.c[Y] > p0.c[Y] ? 1 : -1) * (ierror > (p1.c[X] - p0.c[X])); // Up or down ? 
+      ierror -= 2 * (p1.c[X] - p0.c[X]) * (ierror > (p1.c[X] - p0.c[X])); 
     }	
 } 
 
 void draw_line(Line line, TGAImage &framebuffer, TGAColor color)
 {
-  bool steep = std::abs(line.start_point.x - line.end_point.x) < std::abs(line.start_point.y - line.end_point.y);
+  bool steep = std::abs(line.p.c[X] - line.p1.c[X]) < std::abs(line.p0.c[Y] - line.p1.c[Y]);
   if (steep)
     {
-      std::swap(line.start_point.x, line.start_point.y);
-      std::swap(line.end_point.x,   line.end_point.y); 
+      std::swap(line.p0.c[X], line.p0.c[Y]);
+      std::swap(line.p1.c[X], line.p1.c[Y]); 
     }
   
-  if (line.start_point.x > line.end_point.x)
+  if (line.p0.c[X] > line.p1.c[X])
     {
-      std::swap(line.start_point.x, line.end_point.x);
-      std::swap(line.start_point.y, line.end_point.y); 
+      std::swap(line.p0.c[X], line.p1.c[X]);
+      std::swap(line.p0.c[Y], line.p1.c[Y]); 
     }
 
-  int y = line.start_point.y;
+  int y = line.p0.c[Y];
   int ierror = 0; 
-  for (int x = line.start_point.x; x < line.end_point.x; x++)
+  for (int x = line.p0.c[X]; x < line.p1.c[X]; x++)
     {
       if (steep)
         framebuffer.set(y, x, color);
       else 
         framebuffer.set(x, y, color);
 
-      ierror += 2 * std::abs(line.end_point.y - line.start_point.y); 
+      ierror += 2 * std::abs(line.p1.c[Y] - line.p0.c[Y]); 
 	
-      y += (line.end_point.y > line.start_point.y ? 1 : -1) * (ierror > (line.end_point.x - line.start_point.x)); // Up or down ? 
-      ierror -= 2 * (line.end_point.x - line.start_point.x) * (ierror > (line.end_point.x - line.start_point.x)); 
+      y += (line.p1.c[Y] > line.p0.c[Y] ? 1 : -1) * (ierror > (line.p1.c[X] - line.p0.c[X])); // Up or down ? 
+      ierror -= 2 * (line.p1.c[X] - line.p0.c[X]) * (ierror > (line.p1.c[X] - line.p0.c[X])); 
     }	
 }
 

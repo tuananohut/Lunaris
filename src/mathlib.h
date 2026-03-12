@@ -1,6 +1,11 @@
 #ifndef MATHLIB_H
 #define MATHLIB_H
 
+#define X 0
+#define Y 1
+#define Z 2
+#define W 3
+
 struct Vector2 { int c[2]; };
 struct Vector3 { int c[3]; };
 struct Vector4 { int c[4]; };
@@ -53,6 +58,13 @@ Vector2 vec2_div(Vector2 a, Vector2 b)
 
 ///////////////////////////////////////////////////////////
 
+Vector3 assign_vec3s(Vector3 a, Vector3 b)
+{
+  a.c[0] = b.c[0];
+  a.c[1] = b.c[1];
+  a.c[2] = b.c[2];
+  return a;
+}
 
 Vector3 vec3(int x, int y, int z)
 {
@@ -96,6 +108,60 @@ Vector3 vec3_div(Vector3 a, Vector3 b)
   
   return a;
 }
+
+///////////////////////////////////////////////////////////
+
+Vector3f assign_vec3fs(Vector3f a, Vector3f b)
+{
+  a.c[0] = b.c[0];
+  a.c[1] = b.c[1];
+  a.c[2] = b.c[2];
+  return a;
+}
+
+Vector3f vec3f(double x, double y, double z)
+{
+  Vector3f v = {{ x, y, z }}; 
+  return v;
+}
+
+Vector3f vec3fs(double x)
+{
+  return vec3f(x, x, x); 
+}
+
+Vector3f vec3f_add(Vector3f a, Vector3f b)
+{
+  for (size_t i = 0; i < 3; ++i)
+      a.c[i] += b.c[i];
+  
+  return a;
+}
+
+Vector3f vec3f_sub(Vector3f a, Vector3f b)
+{
+  for (size_t i = 0; i < 3; ++i)
+      a.c[i] -= b.c[i];
+  
+  return a;
+}
+
+Vector3f vec3f_mul(Vector3f a, Vector3f b)
+{
+  for (size_t i = 0; i < 3; ++i)
+      a.c[i] *= b.c[i];
+  
+  return a;
+}
+
+Vector3f vec3f_div(Vector3f a, Vector3f b)
+{
+  for (size_t i = 0; i < 3; ++i)
+      a.c[i] /= b.c[i];
+  
+  return a;
+}
+
 
 ///////////////////////////////////////////////////////////
 
