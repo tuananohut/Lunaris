@@ -22,7 +22,9 @@ jobs:
 
     # Build Project
     - name: Build Project
-      run: .\build.bat
+      run: |
+        call "%VSINSTALLDIR%\VC\Auxiliary\Build\vcvarsall.bat" x64
+        .\build.bat
       shell: cmd
 
     # Run Rasterizer
