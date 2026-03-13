@@ -1,0 +1,34 @@
+name: Lunaris 
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    # MSVC (cl.exe)
+    - name: Setup MSVC
+      uses: microsoft/setup-msbuild@v1.0.2
+      
+    - name: Build Project
+      run: .\build.bat
+      shell: cmd
+
+    - name: Run Rasterizer
+      run: .\run.bat
+      shell: cmd
+
+    - name: Upload Render Output
+      uses: actions/upload-artifact@v4
+      with:
+        name: Lunaris-Render
+        path: build\*.tga
+        if-no-files-found: ignore
