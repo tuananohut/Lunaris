@@ -19,15 +19,13 @@ bool object_to_render(const char *filename, ModelBuffer &buffer)
         {
           double x, y, z;
           int read = sscanf(line, "v %lf %lf %lf", &x, &y, &z);
-          buffer.vertices[posCount++] = assign_vec3fs(buffer.vertices[posCount++], vec3f(x, y, z));
-          // buffer.vertices[posCount++] = Vector3f(x, y, z); 
+          buffer.vertices[posCount++] = vec3f(x, y, z);
         }
       if (line[0] == 'f' && line[1] == ' ')
         {
           int v0, v1, v2; 
           sscanf(line, "f %d%*[^ ] %d%*[^ ] %d%*[^ ]", &v0, &v1, &v2);
-          buffer.faces[faceCount++] = assign_vec3s(buffer.faces[faceCount++], vec3(v0 - 1, v1 - 1, v2 - 1));
-            // buffer.faces[faceCount++] = Vector3(v0 - 1, v1 - 1, v2 - 1);
+          buffer.faces[faceCount++] = vec3(v0 - 1, v1 - 1, v2 - 1);
         }
     }
 
