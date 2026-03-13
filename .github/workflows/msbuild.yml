@@ -1,4 +1,4 @@
-name: Lunaris 
+name: Lunaris
 
 on:
   push:
@@ -14,18 +14,23 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4
 
-    # MSVC (cl.exe)
+    # MSVC v 
     - name: Setup MSVC
-      uses: microsoft/setup-msbuild@v1.0.2
-      
+      uses: microsoft/setup-msbuild@v1.1
+      with:
+        vs-version: '17.5'   # VS 2022
+
+    # Build Project
     - name: Build Project
       run: .\build.bat
       shell: cmd
 
+    # Run Rasterizer
     - name: Run Rasterizer
       run: .\run.bat
       shell: cmd
 
+    # Upload Render Output
     - name: Upload Render Output
       uses: actions/upload-artifact@v4
       with:
