@@ -17,7 +17,6 @@ jobs:
     - name: Setup Visual Studio Environment
       shell: cmd
       run: |
-        :: En güncel VS 2022 yolunu vswhere ile al
         for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.Component.MSBuild -property installationPath`) do set VS_PATH=%%i
         if not defined VS_PATH (
           echo ERROR: Visual Studio not found
@@ -26,8 +25,9 @@ jobs:
         echo VS found: %VS_PATH%
         call "%VS_PATH%\VC\Auxiliary\Build\vcvarsall.bat" x64
 
-        :: Build
-        cl /EHsc src\*.cpp /Fe:build\*.exe
+        if not exist build mkdir build
+
+        cl /EHsc src\*.cpp /Fe:build\rasterizer.exe
 
     - name: Run Rasterizer
       run: .\run.bat
