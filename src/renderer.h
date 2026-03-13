@@ -21,6 +21,7 @@ constexpr TGAColor grey    = {233, 233, 241, 255};
 
 void draw_line(int x1, int y1, int x2, int y2, TGAImage &framebuffer, TGAColor color);
 void draw_line(Vector2 start_point, Vector2 end_point, TGAImage &framebuffer, TGAColor color);
+void draw_line(Line line, TGAImage &framebuffer, TGAColor color);
 
 void draw_triangle(Vector2 point1, Vector2 point2, Vector2 point3, TGAImage &framebuffer, TGAColor color);
 
