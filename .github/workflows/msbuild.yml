@@ -14,25 +14,25 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4
 
-    # MSVC v 
-    - name: Setup MSVC
-      uses: microsoft/setup-msbuild@v1.1
-      with:
-        vs-version: '17.5'   # VS 2022
-
-    # Build Project
-    - name: Build Project
-      run: |
-        call "%VSINSTALLDIR%\VC\Auxiliary\Build\vcvarsall.bat" x64
-        .\build.bat
+    - name: Setup Visual Studio Environment
       shell: cmd
+      run: |
+        :: En güncel VS 2022 yolunu vswhere ile al
+        for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.Component.MSBuild -property installationPath`) do set VS_PATH=%%i
+        if not defined VS_PATH (
+          echo ERROR: Visual Studio not found
+          exit /b 1
+        )
+        echo VS found: %VS_PATH%
+        call "%VS_PATH%\VC\Auxiliary\Build\vcvarsall.bat" x64
 
-    # Run Rasterizer
+        :: Build
+        cl /EHsc src\*.cpp /Fe:build\*.exe
+
     - name: Run Rasterizer
       run: .\run.bat
       shell: cmd
 
-    # Upload Render Output
     - name: Upload Render Output
       uses: actions/upload-artifact@v4
       with:
