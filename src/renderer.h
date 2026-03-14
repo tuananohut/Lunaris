@@ -24,9 +24,6 @@ void draw_line(Vector2 start_point, Vector2 end_point, TGAImage &framebuffer, TG
 
 void draw_triangle(Vector2 point1, Vector2 point2, Vector2 point3, TGAImage &framebuffer, TGAColor color);
 
-double signed_triangle_area(Vector2 point1, Vector2 point2, Vector2 point3);
-double signed_triangle_area(Vector3 point1, Vector3 point2, Vector3 point3);
-
 Vector3 screen(const Vector3f &point); 
 Vector3f translate_z(Vector3f &point3f, float dz);
 

@@ -18,7 +18,9 @@ Vector2 vec2_add(Vector2 a, Vector2 b);
 Vector2 vec2_sub(Vector2 a, Vector2 b);
 Vector2 vec2_mul(Vector2 a, Vector2 b);
 Vector2 vec2_div(Vector2 a, Vector2 b);
-int vec2_dot(Vector3f a, Vector3f b);
+int vec2_dot(Vector2 a, Vector2 b);
+double cross_product(Vector2 a, Vector2 b);
+double signed_triangle_area(Vector2 a, Vector2 b, Vector2 c);
 
 ///////////////////////////////////////////////////////////
 
@@ -29,6 +31,7 @@ Vector3 vec3_sub(Vector3 a, Vector3 b);
 Vector3 vec3_mul(Vector3 a, Vector3 b);
 Vector3 vec3_div(Vector3 a, Vector3 b);
 int vec3_dot(Vector3f a, Vector3f b);
+double signed_triangle_area(Vector3 a, Vector3 b, Vector3 c);
 
 ///////////////////////////////////////////////////////////
 

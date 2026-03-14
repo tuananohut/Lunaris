@@ -178,21 +178,6 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAImage &zbuff
     }
 }
 
-
-double signed_triangle_area(Vector2 point1, Vector2 point2, Vector2 point3)
-{
-  return .5 * ((point2.c[Y] - point1.c[Y])*(point2.c[X] + point1.c[X]) +
-               (point3.c[Y] - point2.c[Y])*(point3.c[X] + point2.c[X]) +
-               (point1.c[Y] - point3.c[Y])*(point1.c[X] + point3.c[X]));
-}
-
-double signed_triangle_area(Vector3 point1, Vector3 point2, Vector3 point3)
-{  
-  return .5 * ((point2.c[Y] - point1.c[Y])*(point2.c[X] + point1.c[X]) +
-               (point3.c[Y] - point2.c[Y])*(point3.c[X] + point2.c[X]) +
-               (point1.c[Y] - point3.c[Y])*(point1.c[X] + point3.c[X]));
-}
-
 void fill_triangle(Vector2 point1, Vector2 point2, Vector2 point3,
                    TGAImage &framebuffer, TGAColor color)
 {

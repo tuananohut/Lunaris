@@ -49,6 +49,18 @@ int vec2_dot(Vector2 a, Vector2 b)
            a.c[Y] * b.c[Y];
 }
 
+double cross_product(Vector2 a, Vector2 b)
+{
+  return (a.c[X] * b.c[Y]) - (a.c[Y] * b.c[X]);
+}
+
+double signed_triangle_area(Vector2 a, Vector2 b, Vector2 c)
+{
+  Vector2 ab = { b.c[X] - a.c[X], b.c[Y] - a.c[Y] };
+  Vector2 ac = { c.c[X] - a.c[X], c.c[Y] - a.c[Y] };
+  return .5 * cross_product(ab, ac); 
+};
+
 ///////////////////////////////////////////////////////////
 
 Vector3 vec3(int x, int y, int z)
@@ -101,6 +113,12 @@ int vec3_dot(Vector3 a, Vector3 b)
            a.c[Z] * b.c[Z];
 }
 
+double signed_triangle_area(Vector3 a, Vector3 b, Vector3 c)
+{
+  Vector2 ab = { b.c[X] - a.c[X], b.c[Y] - a.c[Y] };
+  Vector2 ac = { c.c[X] - a.c[X], c.c[Y] - a.c[Y] };
+  return .5 * cross_product(ab, ac); 
+}
 
 ///////////////////////////////////////////////////////////
 
