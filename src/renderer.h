@@ -19,7 +19,7 @@ constexpr TGAColor navy    = { 61,  23,  21, 255};
 constexpr TGAColor purple  = {152,  37, 152, 255};
 constexpr TGAColor grey    = {233, 233, 241, 255};
 
-void draw_line(int x1, int y1, int x2, int y2, TGAImage &framebuffer, TGAColor color);
+
 void draw_line(Vector2 start_point, Vector2 end_point, TGAImage &framebuffer, TGAColor color);
 
 void draw_triangle(Vector2 point1, Vector2 point2, Vector2 point3, TGAImage &framebuffer, TGAColor color);
@@ -37,8 +37,5 @@ void fill_triangle(Vector2 point1, Vector2 point2, Vector2 point3,
 		   TGAImage &framebuffer, TGAColor color);
 void fill_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
                    TGAImage &framebuffer, TGAImage& zbuffer, TGAColor color);
-void fill_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
-		   Vector3 colorA, Vector3 colorB, Vector3 colorC, 
-		   TGAImage &framebuffer);
 
 #endif

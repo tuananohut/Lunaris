@@ -12,6 +12,9 @@ struct Vector4 { int c[4]; };
 
 struct Vector3f { double c[3]; };
 
+struct Matrix { int m[4][4]; };
+
+
 Vector2 vec2(int x, int y);
 Vector2 vec2s(int x);
 Vector2 vec2_add(Vector2 a, Vector2 b);
@@ -51,6 +54,12 @@ Vector4 vec4_add(Vector4 a, Vector4 b);
 Vector4 vec4_sub(Vector4 a, Vector4 b);
 Vector4 vec4_mul(Vector4 a, Vector4 b);
 Vector4 vec4_div(Vector4 a, Vector4 b);
-int vec4_dot(Vector3f a, Vector3f b);
+Vector4 mul_vec4(Matrix m, Vector4 v);
+int vec4_dot(Vector4 a, Vector4 b);
+
+///////////////////////////////////////////////////////////
+
+Matrix matrix_identity();
 
 #endif
+

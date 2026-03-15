@@ -174,7 +174,6 @@ double vec3f_dot(Vector3f a, Vector3f b)
 
 ///////////////////////////////////////////////////////////
 
-
 Vector4 vec4(int x, int y, int z, int w)
 {
   Vector4 v = {{ x, y, z, w }}; 
@@ -218,6 +217,18 @@ Vector4 vec4_div(Vector4 a, Vector4 b)
   return a;
 }
 
+Vector4 mul_vec4(Matrix m, Vector4 v)
+{
+  Vector4 r;
+
+  r.c[X] = m.m[0][0]*v.c[X] + m.m[0][1]*v.c[Y] + m.m[0][2]*v.c[Z] + m.m[0][3]*v.c[W];
+  r.c[Y] = m.m[1][0]*v.c[X] + m.m[1][1]*v.c[Y] + m.m[1][2]*v.c[Z] + m.m[1][3]*v.c[W];
+  r.c[Z] = m.m[2][0]*v.c[X] + m.m[2][1]*v.c[Y] + m.m[2][2]*v.c[Z] + m.m[2][3]*v.c[W];
+  r.c[W] = m.m[3][0]*v.c[X] + m.m[3][1]*v.c[Y] + m.m[3][2]*v.c[Z] + m.m[3][3]*v.c[W];
+
+  return r;
+}
+
 int vec4_dot(Vector4 a, Vector4 b)
 {
     return a.c[X] * b.c[X] +
@@ -225,3 +236,21 @@ int vec4_dot(Vector4 a, Vector4 b)
            a.c[Z] * b.c[Z] +
            a.c[W] * b.c[W];
 }
+
+///////////////////////////////////////////////////////////
+
+Matrix matrix_identity()
+{
+  Matrix matrix
+    {
+      {
+        {1,0,0,0},
+        {0,1,0,0},
+        {0,0,1,0},
+        {0,0,0,1}
+      }
+    };
+  
+  return matrix; 
+}
+
