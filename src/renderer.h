@@ -6,8 +6,8 @@
 #include "tgaimage.h"
 #include "mathlib.h"
 
-constexpr int width  = 1080;			  
-constexpr int height = 1080;
+constexpr i32 width  = 1080;			  
+constexpr i32 height = 1080;
 
 constexpr TGAColor white   = {255, 255, 255, 255}; // attention, BGRA order
 constexpr TGAColor green   = {  0, 255,   0, 255};

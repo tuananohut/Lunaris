@@ -8,8 +8,8 @@ bool object_to_render(const char *filename, ModelBuffer &buffer)
   if (!file)
     return false;
   
-  int posCount = 0;
-  int faceCount = 0;
+  i32 posCount = 0;
+  i32 faceCount = 0;
   
   char line[40000];
 
@@ -17,13 +17,13 @@ bool object_to_render(const char *filename, ModelBuffer &buffer)
     {
       if (line[0] == 'v' && line[1] == ' ')
         {
-          double x, y, z;
-          int read = sscanf(line, "v %lf %lf %lf", &x, &y, &z);
+          f64 x, y, z;
+          i32 read = sscanf(line, "v %lf %lf %lf", &x, &y, &z);
           buffer.vertices[posCount++] = vec3f(x, y, z);
         }
       if (line[0] == 'f' && line[1] == ' ')
         {
-          int v0, v1, v2; 
+          i32 v0, v1, v2; 
           sscanf(line, "f %d%*[^ ] %d%*[^ ] %d%*[^ ]", &v0, &v1, &v2);
           buffer.faces[faceCount++] = vec3(v0 - 1, v1 - 1, v2 - 1);
         }

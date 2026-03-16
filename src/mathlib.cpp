@@ -1,12 +1,12 @@
 #include "mathlib.h"
 
-Vector2 vec2(int x, int y)
+Vector2 vec2(i32 x, i32 y)
 {
   Vector2 v = {{ x, y }}; 
   return v;
 }
 
-Vector2 vec2s(int x)
+Vector2 vec2s(i32 x)
 {
   return vec2(x, x); 
 }
@@ -43,18 +43,18 @@ Vector2 vec2_div(Vector2 a, Vector2 b)
   return a;
 }
 
-int vec2_dot(Vector2 a, Vector2 b)
+i32 vec2_dot(Vector2 a, Vector2 b)
 {
     return a.c[X] * b.c[X] +
            a.c[Y] * b.c[Y];
 }
 
-double cross_product(Vector2 a, Vector2 b)
+f64 cross_product(Vector2 a, Vector2 b)
 {
   return (a.c[X] * b.c[Y]) - (a.c[Y] * b.c[X]);
 }
 
-double signed_triangle_area(Vector2 a, Vector2 b, Vector2 c)
+f64 signed_triangle_area(Vector2 a, Vector2 b, Vector2 c)
 {
   Vector2 ab = { b.c[X] - a.c[X], b.c[Y] - a.c[Y] };
   Vector2 ac = { c.c[X] - a.c[X], c.c[Y] - a.c[Y] };
@@ -63,13 +63,13 @@ double signed_triangle_area(Vector2 a, Vector2 b, Vector2 c)
 
 ///////////////////////////////////////////////////////////
 
-Vector3 vec3(int x, int y, int z)
+Vector3 vec3(i32 x, i32 y, i32 z)
 {
   Vector3 v = {{ x, y, z }}; 
   return v;
 }
 
-Vector3 vec3s(int x)
+Vector3 vec3s(i32 x)
 {
   return vec3(x, x, x); 
 }
@@ -106,14 +106,14 @@ Vector3 vec3_div(Vector3 a, Vector3 b)
   return a;
 }
 
-int vec3_dot(Vector3 a, Vector3 b)
+i32 vec3_dot(Vector3 a, Vector3 b)
 {
     return a.c[X] * b.c[X] +
            a.c[Y] * b.c[Y] +
            a.c[Z] * b.c[Z];
 }
 
-double signed_triangle_area(Vector3 a, Vector3 b, Vector3 c)
+f64 signed_triangle_area(Vector3 a, Vector3 b, Vector3 c)
 {
   Vector2 ab = { b.c[X] - a.c[X], b.c[Y] - a.c[Y] };
   Vector2 ac = { c.c[X] - a.c[X], c.c[Y] - a.c[Y] };
@@ -122,13 +122,13 @@ double signed_triangle_area(Vector3 a, Vector3 b, Vector3 c)
 
 ///////////////////////////////////////////////////////////
 
-Vector3f vec3f(double x, double y, double z)
+Vector3f vec3f(f64 x, f64 y, f64 z)
 {
   Vector3f v = {{ x, y, z }}; 
   return v;
 }
 
-Vector3f vec3fs(double x)
+Vector3f vec3fs(f64 x)
 {
   return vec3f(x, x, x); 
 }
@@ -165,7 +165,7 @@ Vector3f vec3f_div(Vector3f a, Vector3f b)
   return a;
 }
 
-double vec3f_dot(Vector3f a, Vector3f b)
+f64 vec3f_dot(Vector3f a, Vector3f b)
 {
     return a.c[X]*b.c[X] +
            a.c[Y]*b.c[Y] +
@@ -174,13 +174,13 @@ double vec3f_dot(Vector3f a, Vector3f b)
 
 ///////////////////////////////////////////////////////////
 
-Vector4 vec4(int x, int y, int z, int w)
+Vector4 vec4(i32 x, i32 y, i32 z, i32 w)
 {
   Vector4 v = {{ x, y, z, w }}; 
   return v;
 }
 
-Vector4 vec4s(int x)
+Vector4 vec4s(i32 x)
 {
   return vec4(x, x, x, x); 
 }
@@ -229,7 +229,7 @@ Vector4 mul_vec4(Matrix m, Vector4 v)
   return r;
 }
 
-int vec4_dot(Vector4 a, Vector4 b)
+i32 vec4_dot(Vector4 a, Vector4 b)
 {
     return a.c[X] * b.c[X] +
            a.c[Y] * b.c[Y] +
@@ -244,13 +244,63 @@ Matrix matrix_identity()
   Matrix matrix
     {
       {
-        {1,0,0,0},
-        {0,1,0,0},
-        {0,0,1,0},
-        {0,0,0,1}
+        { 1.0, 0.0, 0.0, 0.0 },
+        { 0.0, 1.0, 0.0, 0.0 },
+        { 0.0, 0.0, 1.0, 0.0 },
+        { 0.0, 0.0, 0.0, 1.0 }
       }
     };
   
   return matrix; 
 }
 
+Matrix matrix_rotation_x(f64 t)
+{
+  f64 c = std::cos(t);
+  f64 s = std::sin(t);
+
+  Matrix matrix
+    {
+      {
+        1.0, 0.0, 0.0,
+        0.0,   c,  -s,
+        0.0,   s,   c, 
+      }
+    };
+
+  return matrix; 
+}
+
+Matrix matrix_rotation_y(f64 t)
+{
+  f64 c = std::cos(t);
+  f64 s = std::sin(t);
+
+  Matrix matrix
+    {
+      {
+          c, 0.0,   s,
+        0.0, 1.0, 0.0,
+         -s, 0.0,   c, 
+      }
+    };
+
+  return matrix; 
+}
+
+Matrix matrix_rotation_z(f64 t)
+{
+  f64 c = std::cos(t);
+  f64 s = std::sin(t);
+
+  Matrix matrix
+    {
+      {
+          c,  -s, 0.0,
+          s,   c, 0.0,
+        0.0, 0.0, 1.0, 
+      }
+    };
+
+  return matrix; 
+} 
