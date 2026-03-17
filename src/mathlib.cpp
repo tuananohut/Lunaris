@@ -35,18 +35,45 @@ Vector2 vec2_mul(Vector2 a, Vector2 b)
   return a;
 }
 
+Vector2 vec2_mul_scalar(Vector2 a, i32 s)
+{
+  for (size_t i = 0; i < 2; ++i)
+    a.c[i] *= s;
+  
+  return a;
+}
+
 Vector2 vec2_div(Vector2 a, Vector2 b)
 {
   for (size_t i = 0; i < 2; ++i)
       a.c[i] /= b.c[i];
   
   return a;
+} 
+
+Vector2 vec2_div_scalar(Vector2 a, i32 s)
+{
+  s = 1.f / s; 
+  for (size_t i = 0; i < 2; ++i)
+    a.c[i] *= s;
+  
+  return a;
+}
+
+Vector2 vec2_normalize(const Vector2 a)
+{
+  return vec2_div_scalar(a, vec2_magnitude(a));
 }
 
 i32 vec2_dot(Vector2 a, Vector2 b)
 {
     return a.c[X] * b.c[X] +
            a.c[Y] * b.c[Y];
+}
+
+f64 vec2_magnitude(const Vector2 a)
+{
+  return std::sqrt(a.c[X] * a.c[X] + a.c[Y] * a.c[Y]); 
 }
 
 f64 cross_product(Vector2 a, Vector2 b)
@@ -98,6 +125,14 @@ Vector3 vec3_mul(Vector3 a, Vector3 b)
   return a;
 }
 
+Vector3 vec3_mul_scalar(Vector3 a, i32 s)
+{
+  for (size_t i = 0; i < 3; ++i)
+    a.c[i] *= s;
+  
+  return a;
+}
+
 Vector3 vec3_div(Vector3 a, Vector3 b)
 {
   for (size_t i = 0; i < 3; ++i)
@@ -106,11 +141,32 @@ Vector3 vec3_div(Vector3 a, Vector3 b)
   return a;
 }
 
+Vector3 vec3_div_scalar(Vector3 a, i32 s)
+{
+  s = 1.f / s; 
+  for (size_t i = 0; i < 3; ++i)
+    a.c[i] *= s;
+  
+  return a;
+}
+
+Vector3 vec3_normalize(const Vector3 a)
+{
+  return vec3_div_scalar(a, vec3_magnitude(a));
+}
+
 i32 vec3_dot(Vector3 a, Vector3 b)
 {
     return a.c[X] * b.c[X] +
            a.c[Y] * b.c[Y] +
            a.c[Z] * b.c[Z];
+}
+
+f64 vec3_magnitude(const Vector3 a)
+{
+  return std::sqrt(a.c[X] * a.c[X] +
+                   a.c[Y] * a.c[Y] +
+                   a.c[Z] * a.c[Z]); 
 }
 
 f64 signed_triangle_area(Vector3 a, Vector3 b, Vector3 c)
@@ -157,6 +213,14 @@ Vector3f vec3f_mul(Vector3f a, Vector3f b)
   return a;
 }
 
+Vector3f vec3f_mul_scalar(Vector3f a, f64 s)
+{
+  for (size_t i = 0; i < 3; ++i)
+    a.c[i] *= s;
+  
+  return a;
+}
+
 Vector3f vec3f_div(Vector3f a, Vector3f b)
 {
   for (size_t i = 0; i < 3; ++i)
@@ -165,11 +229,32 @@ Vector3f vec3f_div(Vector3f a, Vector3f b)
   return a;
 }
 
+Vector3f vec3f_div_scalar(Vector3f a,f64 s)
+{
+  s = 1.f / s; 
+  for (size_t i = 0; i < 3; ++i)
+    a.c[i] *= s;
+  
+  return a;
+}
+
+Vector3f vec3f_normalize(const Vector3f a)
+{
+  return vec3f_div_scalar(a, vec3f_magnitude(a));
+}
+
 f64 vec3f_dot(Vector3f a, Vector3f b)
 {
     return a.c[X]*b.c[X] +
            a.c[Y]*b.c[Y] +
            a.c[Z]*b.c[Z];
+}
+
+f64 vec3f_magnitude(const Vector3f a)
+{
+  return std::sqrt(a.c[X] * a.c[X] +
+                   a.c[Y] * a.c[Y] +
+                   a.c[Z] * a.c[Z]); 
 }
 
 ///////////////////////////////////////////////////////////
@@ -209,12 +294,34 @@ Vector4 vec4_mul(Vector4 a, Vector4 b)
   return a;
 }
 
+Vector4 vec4_mul_scalar(Vector4 a, i32 s)
+{
+  for (size_t i = 0; i < 4; ++i)
+    a.c[i] *= s;
+  
+  return a;
+}
+
 Vector4 vec4_div(Vector4 a, Vector4 b)
 {
   for (size_t i = 0; i < 4; ++i)
       a.c[i] /= b.c[i];
   
   return a;
+}
+
+Vector4 vec4_div_scalar(Vector4 a, i32 s)
+{
+  s = 1.f / s; 
+  for (size_t i = 0; i < 4; ++i)
+    a.c[i] *= s;
+  
+  return a;
+}
+
+Vector4 vec4_normalize(const Vector4 a)
+{
+  return vec4_div_scalar(a, vec4_magnitude(a));
 }
 
 Vector4 mul_vec4(Matrix m, Vector4 v)
@@ -235,6 +342,14 @@ i32 vec4_dot(Vector4 a, Vector4 b)
            a.c[Y] * b.c[Y] +
            a.c[Z] * b.c[Z] +
            a.c[W] * b.c[W];
+}
+
+f64 vec4_magnitude(const Vector4 a)
+{
+  return std::sqrt(a.c[X] * a.c[X] +
+                   a.c[Y] * a.c[Y] +
+                   a.c[Z] * a.c[Z] +
+                   a.c[W] * a.c[W]); 
 }
 
 ///////////////////////////////////////////////////////////

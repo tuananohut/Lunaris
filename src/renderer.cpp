@@ -77,59 +77,6 @@ void render_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAColor color)
     }
 }
 
-void scanline_rendering(Vector2 point1, Vector2 point2, Vector2 point3,
-                        TGAImage &framebuffer, TGAColor color)
-{
-  if (point2.c[Y] > point3.c[Y])
-    {
-      std::swap(point2.c[Y], point3.c[Y]);
-      std::swap(point2.c[X], point3.c[X]); 
-    }
-
-  if (point1.c[Y] > point3.c[Y])
-    {
-      std::swap(point1.c[Y], point3.c[Y]);
-      std::swap(point1.c[X], point3.c[X]); 
-    }
-
-  if (point1.c[Y] > point2.c[Y])
-    {
-      std::swap(point1.c[Y], point2.c[Y]);
-      std::swap(point1.c[X], point2.c[X]);
-    }
-
-  i32 total_height = point3.c[Y] - point1.c[Y];
-
-  if (point1.c[Y] != point2.c[Y])
-    {
-      i32 segment_height = point2.c[Y] - point1.c[Y];
-      for (i32 y = point1.c[Y]; y <= point2.c[Y]; y++)
-        {
-          i32 x1 = point1.c[X] + ((point3.c[X] - point1.c[X]) * (y - point1.c[Y])) / total_height; 
-          i32 x2 = point1.c[X] + ((point2.c[X] - point1.c[X]) * (y - point1.c[Y])) / segment_height;
-          for (i32 x = std::min(x1, x2); x < std::max(x1, x2); x++)
-            {
-              framebuffer.set(x, y, color);
-            }
-        }
-    }
-
-  if (point2.c[Y] != point3.c[Y])
-    {
-      i32 segment_height = point3.c[Y] - point2.c[Y];
-      for (i32 y = point2.c[Y]; y <= point3.c[Y]; y++)
-        {
-          i32 x1 = point1.c[X] + ((point3.c[X] - point1.c[X]) * (y - point1.c[Y])) / total_height; 
-          i32 x2 = point2.c[X] + ((point3.c[X] - point2.c[X]) * (y - point2.c[Y])) / segment_height;
-          for (i32 x = std::min(x1, x2); x < std::max(x1, x2); x++)
-            {
-              framebuffer.set(x, y, color);
-            }
-        }
-    }
-}
-
-
 void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAImage &zbuffer)
 {
   for (i32 i = 0; i < buffer.face_count; i++)

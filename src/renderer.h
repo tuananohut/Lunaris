@@ -30,9 +30,6 @@ Vector3f translate_z(Vector3f &point3f, float dz);
 void render_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAColor color);
 void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAImage &zbuffer);
 
-void scanline_rendering(Vector2 point1, Vector2 point2, Vector2 point3,
-			TGAImage &framebuffer, TGAColor color);
-
 void fill_triangle(Vector2 point1, Vector2 point2, Vector2 point3,
 		   TGAImage &framebuffer, TGAColor color);
 void fill_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
