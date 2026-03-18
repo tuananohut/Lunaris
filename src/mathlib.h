@@ -3,17 +3,17 @@
 
 #include <cmath>
 
-#define X 0
-#define Y 1
-#define Z 2
-#define W 3
-
 typedef float  f32;
 typedef double f64;
 
 typedef char   i8;
 typedef char   i16; 
 typedef int    i32;
+
+const i32 X = 0;
+const i32 Y = 1;
+const i32 Z = 2;
+const i32 W = 3;
 
 struct Vector2 { i32 c[2]; };
 struct Vector3 { i32 c[3]; };
@@ -22,7 +22,6 @@ struct Vector4 { i32 c[4]; };
 struct Vector3f { f64 c[3]; };
 
 struct Matrix { f64 m[4][4]; };
-
 
 Vector2 vec2(i32 x, i32 y);
 Vector2 vec2s(i32 x);
@@ -84,6 +83,10 @@ f64 vec4_magnitude(const Vector4 a);
 
 ///////////////////////////////////////////////////////////
 
+Matrix matrix(f32 nOO, f32 nOl, f32 n02,
+              f32 nlO, f32 nll, f32 nl2,
+              f32 n20, f32 n21, f32 n22,
+              f32 n30, f32 n31, f32 n32);
 Matrix matrix_identity();
 Matrix matrix_rotation_x(f64 t); 
 Matrix matrix_rotation_y(f64 t); 

@@ -388,6 +388,7 @@ Matrix matrix_rotation_x(f64 t)
 
 Matrix matrix_rotation_y(f64 t)
 {
+  t = ; 
   f64 c = std::cos(t);
   f64 s = std::sin(t);
 
