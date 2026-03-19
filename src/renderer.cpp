@@ -79,13 +79,21 @@ void render_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAColor color)
 
 void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAImage &zbuffer)
 {
+  f64 deg = 30.0;
+  f64 rad = deg * DEG2RAD;
+  
+  Matrix3D rotation_matrix_x = matrix3d_rotation_x(rad);
+  Matrix3D rotation_matrix_y = matrix3d_rotation_y(rad);
+
+  Matrix3D rotate = rotation_matrix_y;  
+  
   for (i32 i = 0; i < buffer.face_count; i++)
     {
       Vector3 face = buffer.faces[i];
 
-      Vector3 vertex0 = screen(buffer.vertices[face.c[X]]);   
-      Vector3 vertex1 = screen(buffer.vertices[face.c[Y]]);   
-      Vector3 vertex2 =	screen(buffer.vertices[face.c[Z]]);
+      Vector3 vertex0 = screen(mul_vec3f(rotate, buffer.vertices[face.c[X]]));   
+      Vector3 vertex1 = screen(mul_vec3f(rotate, buffer.vertices[face.c[Y]]));   
+      Vector3 vertex2 =	screen(mul_vec3f(rotate, buffer.vertices[face.c[Z]]));
 
       TGAColor rnd;
       for (i32 c = 0; c < 3; c++)

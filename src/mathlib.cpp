@@ -155,6 +155,18 @@ Vector3 vec3_normalize(const Vector3 a)
   return vec3_div_scalar(a, vec3_magnitude(a));
 }
 
+Vector3 mul_vec3(Vector3 v)
+{
+  Matrix3D m = matrix3d_rotation_y(30); 
+  Vector3 r;
+  
+  r.c[X] =  m.m[0]*v.c[X] + m.m[1]*v.c[Y] + m.m[2]*v.c[Z];
+  r.c[Y] =  m.m[3]*v.c[X] + m.m[4]*v.c[Y] + m.m[5]*v.c[Z];
+  r.c[Z] =  m.m[6]*v.c[X] + m.m[7]*v.c[Y] + m.m[8]*v.c[Z];
+
+  return r;
+}
+
 i32 vec3_dot(Vector3 a, Vector3 b)
 {
     return a.c[X] * b.c[X] +
@@ -243,6 +255,23 @@ Vector3f vec3f_normalize(const Vector3f a)
   return vec3f_div_scalar(a, vec3f_magnitude(a));
 }
 
+Vector3f mul_vec3f(Matrix3D m, Vector3f v)
+{
+  Vector3f r;
+  
+  r.c[X] =  m.m[0]*v.c[X] + m.m[1]*v.c[Y] + m.m[2]*v.c[Z];
+  r.c[Y] =  m.m[3]*v.c[X] + m.m[4]*v.c[Y] + m.m[5]*v.c[Z];
+  r.c[Z] =  m.m[6]*v.c[X] + m.m[7]*v.c[Y] + m.m[8]*v.c[Z];
+
+  return r;
+}
+
+Vector3f perspective(Vector3f v)
+{
+  constexpr f64 c = 3.0;
+  return vec3f_div_scalar(v, (1 - v.c[Z] / c));
+}
+
 f64 vec3f_dot(Vector3f a, Vector3f b)
 {
     return a.c[X]*b.c[X] +
@@ -324,14 +353,14 @@ Vector4 vec4_normalize(const Vector4 a)
   return vec4_div_scalar(a, vec4_magnitude(a));
 }
 
-Vector4 mul_vec4(Matrix m, Vector4 v)
+Vector4 mul_vec4(Matrix4D m, Vector4 v)
 {
   Vector4 r;
-
-  r.c[X] = m.m[0][0]*v.c[X] + m.m[0][1]*v.c[Y] + m.m[0][2]*v.c[Z] + m.m[0][3]*v.c[W];
-  r.c[Y] = m.m[1][0]*v.c[X] + m.m[1][1]*v.c[Y] + m.m[1][2]*v.c[Z] + m.m[1][3]*v.c[W];
-  r.c[Z] = m.m[2][0]*v.c[X] + m.m[2][1]*v.c[Y] + m.m[2][2]*v.c[Z] + m.m[2][3]*v.c[W];
-  r.c[W] = m.m[3][0]*v.c[X] + m.m[3][1]*v.c[Y] + m.m[3][2]*v.c[Z] + m.m[3][3]*v.c[W];
+  
+  r.c[X] =  m.m[0]*v.c[X]  +  m.m[1]*v.c[Y] +  m.m[2]*v.c[Z] +  m.m[3]*v.c[W];
+  r.c[Y] =  m.m[4]*v.c[X]  +  m.m[5]*v.c[Y] +  m.m[6]*v.c[Z] +  m.m[7]*v.c[W];
+  r.c[Z] =  m.m[8]*v.c[X]  +  m.m[9]*v.c[Y] + m.m[10]*v.c[Z] + m.m[11]*v.c[W];
+  r.c[W] = m.m[12]*v.c[X]  + m.m[13]*v.c[Y] + m.m[14]*v.c[Z] + m.m[15]*v.c[W];
 
   return r;
 }
@@ -354,67 +383,172 @@ f64 vec4_magnitude(const Vector4 a)
 
 ///////////////////////////////////////////////////////////
 
-Matrix matrix_identity()
+Matrix3D matrix3d(f32 n00, f32 n01, f32 n02, 
+                  f32 n10, f32 n11, f32 n12, 
+                  f32 n20, f32 n21, f32 n22)
 {
-  Matrix matrix
+  Matrix3D m
     {
       {
-        { 1.0, 0.0, 0.0, 0.0 },
-        { 0.0, 1.0, 0.0, 0.0 },
-        { 0.0, 0.0, 1.0, 0.0 },
-        { 0.0, 0.0, 0.0, 1.0 }
+        n00, n01, n02,
+        n10, n11, n12,
+        n20, n21, n22,
+      }
+    };
+
+  return m; 
+}
+
+Matrix3D matrix3d_identity()
+{
+  Matrix3D matrix
+    {
+      {
+        1.0, 0.0, 0.0,
+        0.0, 1.0, 0.0,
+        0.0, 0.0, 1.0,
       }
     };
   
   return matrix; 
 }
 
-Matrix matrix_rotation_x(f64 t)
+Matrix3D matrix3d_rotation_x(f64 t)
 {
   f64 c = std::cos(t);
   f64 s = std::sin(t);
 
-  Matrix matrix
+  Matrix3D matrix
     {
       {
         1.0, 0.0, 0.0,
         0.0,   c,  -s,
-        0.0,   s,   c, 
+        0.0,   s,   c,
       }
     };
 
   return matrix; 
 }
 
-Matrix matrix_rotation_y(f64 t)
+Matrix3D matrix3d_rotation_y(f64 t)
 {
-  t = ; 
+  // t = ; 
   f64 c = std::cos(t);
   f64 s = std::sin(t);
 
-  Matrix matrix
+  Matrix3D matrix
     {
       {
           c, 0.0,   s,
         0.0, 1.0, 0.0,
-         -s, 0.0,   c, 
+         -s, 0.0,   c,
       }
     };
 
   return matrix; 
 }
 
-Matrix matrix_rotation_z(f64 t)
+Matrix3D matrix3d_rotation_z(f64 t)
 {
   f64 c = std::cos(t);
   f64 s = std::sin(t);
 
-  Matrix matrix
+  Matrix3D matrix
     {
       {
           c,  -s, 0.0,
           s,   c, 0.0,
-        0.0, 0.0, 1.0, 
+        0.0, 0.0, 1.0,
+      }
+    };
+
+  return matrix; 
+} 
+
+///////////////////////////////////////////////////////////
+
+Matrix4D matrix4d(f32 n00, f32 n01, f32 n02, f32 n03, 
+                  f32 n10, f32 n11, f32 n12, f32 n13, 
+                  f32 n20, f32 n21, f32 n22, f32 n23, 
+                  f32 n30, f32 n31, f32 n32, f32 n33)
+{
+  Matrix4D m
+    {
+      {
+        n00, n01, n02, n03,
+        n10, n11, n12, n13,
+        n20, n21, n22, n23,
+        n30, n31, n32, n33,
+      }
+    };
+
+  return m; 
+}
+
+Matrix4D matrix4d_identity()
+{
+  Matrix4D matrix
+    {
+      {
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, 0.0, 1.0,
+      }
+    };
+  
+  return matrix; 
+}
+
+Matrix4D matrix4d_rotation_x(f64 t)
+{
+  f64 c = std::cos(t);
+  f64 s = std::sin(t);
+
+  Matrix4D matrix
+    {
+      {
+        1.0, 0.0, 0.0, 0.0,
+        0.0,   c,  -s, 0.0,
+        0.0,   s,   c, 0.0,
+        0.0, 0.0, 0.0, 1.0,
+      }
+    };
+
+  return matrix; 
+}
+
+Matrix4D matrix4d_rotation_y(f64 t)
+{
+  // t = ; 
+  f64 c = std::cos(t);
+  f64 s = std::sin(t);
+
+  Matrix4D matrix
+    {
+      {
+          c, 0.0,   s, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+         -s, 0.0,   c, 0.0,
+        0.0, 0.0, 0.0, 1.0,
+      }
+    };
+
+  return matrix; 
+}
+
+Matrix4D matrix4d_rotation_z(f64 t)
+{
+  f64 c = std::cos(t);
+  f64 s = std::sin(t);
+
+  Matrix4D matrix
+    {
+      {
+          c,  -s, 0.0, 0.0,
+          s,   c, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, 0.0, 1.0,
       }
     };
 
