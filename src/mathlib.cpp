@@ -1,92 +1,9 @@
 #include "mathlib.h"
 
-Vector2 vec2(i32 x, i32 y)
-{
-  Vector2 v = {{ x, y }}; 
-  return v;
-}
-
-Vector2 vec2s(i32 x)
-{
-  return vec2(x, x); 
-}
-
-Vector2 vec2_add(Vector2 a, Vector2 b)
-{
-  for (size_t i = 0; i < 2; ++i)
-      a.c[i] += b.c[i];
-  
-  return a;
-}
-
-Vector2 vec2_sub(Vector2 a, Vector2 b)
-{
-  for (size_t i = 0; i < 2; ++i)
-      a.c[i] -= b.c[i];
-  
-  return a;
-}
-
-Vector2 vec2_mul(Vector2 a, Vector2 b)
-{
-  for (size_t i = 0; i < 2; ++i)
-      a.c[i] *= b.c[i];
-  
-  return a;
-}
-
-Vector2 vec2_mul_scalar(Vector2 a, i32 s)
-{
-  for (size_t i = 0; i < 2; ++i)
-    a.c[i] *= s;
-  
-  return a;
-}
-
-Vector2 vec2_div(Vector2 a, Vector2 b)
-{
-  for (size_t i = 0; i < 2; ++i)
-      a.c[i] /= b.c[i];
-  
-  return a;
-} 
-
-Vector2 vec2_div_scalar(Vector2 a, i32 s)
-{
-  s = 1.f / s; 
-  for (size_t i = 0; i < 2; ++i)
-    a.c[i] *= s;
-  
-  return a;
-}
-
-Vector2 vec2_normalize(const Vector2 a)
-{
-  return vec2_div_scalar(a, vec2_magnitude(a));
-}
-
-i32 vec2_dot(Vector2 a, Vector2 b)
-{
-    return a.c[X] * b.c[X] +
-           a.c[Y] * b.c[Y];
-}
-
-f64 vec2_magnitude(const Vector2 a)
-{
-  return std::sqrt(a.c[X] * a.c[X] + a.c[Y] * a.c[Y]); 
-}
-
 f64 cross_product(Vector2 a, Vector2 b)
 {
   return (a.c[X] * b.c[Y]) - (a.c[Y] * b.c[X]);
 }
-
-f64 signed_triangle_area(Vector2 a, Vector2 b, Vector2 c)
-{
-  Vector2 ab = { b.c[X] - a.c[X], b.c[Y] - a.c[Y] };
-  Vector2 ac = { c.c[X] - a.c[X], c.c[Y] - a.c[Y] };
-  return .5 * cross_product(ab, ac); 
-};
 
 ///////////////////////////////////////////////////////////
 
@@ -465,6 +382,29 @@ Matrix3D matrix3d_rotation_z(f64 t)
   return matrix; 
 } 
 
+Matrix3D matrix3d_multiply(const Matrix3D a, const Matrix3D b)
+{
+  Matrix3D result = Matrix3D{{0}};
+  
+  // Row 1
+  result.m[0] = a.m[0]*b.m[0] + a.m[1]*b.m[3] + a.m[2]*b.m[6];
+  result.m[1] = a.m[0]*b.m[1] + a.m[1]*b.m[4] + a.m[2]*b.m[7];
+  result.m[2] = a.m[0]*b.m[2] + a.m[1]*b.m[5] + a.m[2]*b.m[8];
+
+  // Row 2
+  result.m[3] = a.m[3]*b.m[0] + a.m[4]*b.m[3] + a.m[5]*b.m[6];
+  result.m[4] = a.m[3]*b.m[1] + a.m[4]*b.m[4] + a.m[5]*b.m[7];
+  result.m[5] = a.m[3]*b.m[2] + a.m[4]*b.m[5] + a.m[5]*b.m[8];
+
+  // Row 3
+  result.m[6] = a.m[6]*b.m[0] + a.m[7]*b.m[3] + a.m[8]*b.m[6];
+  result.m[7] = a.m[6]*b.m[1] + a.m[7]*b.m[4] + a.m[8]*b.m[7];
+  result.m[8] = a.m[6]*b.m[2] + a.m[7]*b.m[5] + a.m[8]*b.m[8];
+
+  return result; 
+}
+
+
 ///////////////////////////////////////////////////////////
 
 Matrix4D matrix4d(f32 n00, f32 n01, f32 n02, f32 n03, 
@@ -554,3 +494,34 @@ Matrix4D matrix4d_rotation_z(f64 t)
 
   return matrix; 
 } 
+
+Matrix4D matrix4d_multiply(const Matrix4D a, const Matrix4D b)
+{
+  Matrix4D result = Matrix4D{{0}};
+  
+  // Row 1
+  result.m[0] = a.m[0]*b.m[0] + a.m[1]*b.m[4] + a.m[2]*b.m[8]  + a.m[3]*b.m[12];
+  result.m[1] = a.m[0]*b.m[1] + a.m[1]*b.m[5] + a.m[2]*b.m[9]  + a.m[3]*b.m[13];
+  result.m[2] = a.m[0]*b.m[2] + a.m[1]*b.m[6] + a.m[2]*b.m[10] + a.m[3]*b.m[14];
+  result.m[3] = a.m[0]*b.m[3] + a.m[1]*b.m[7] + a.m[2]*b.m[11] + a.m[3]*b.m[15];
+
+  // Row 2
+  result.m[4] = a.m[4]*b.m[0] + a.m[5]*b.m[4] + a.m[6]*b.m[8]  + a.m[7]*b.m[12];
+  result.m[5] = a.m[4]*b.m[1] + a.m[5]*b.m[5] + a.m[6]*b.m[9]  + a.m[7]*b.m[13];
+  result.m[6] = a.m[4]*b.m[2] + a.m[5]*b.m[6] + a.m[6]*b.m[10] + a.m[7]*b.m[14];
+  result.m[7] = a.m[4]*b.m[3] + a.m[5]*b.m[7] + a.m[6]*b.m[11] + a.m[7]*b.m[15];
+
+  // Row 3
+  result.m[8]  = a.m[8]*b.m[0] + a.m[9]*b.m[4] + a.m[10]*b.m[8]  + a.m[11]*b.m[12];
+  result.m[9]  = a.m[8]*b.m[1] + a.m[9]*b.m[5] + a.m[10]*b.m[9]  + a.m[11]*b.m[13];
+  result.m[10] = a.m[8]*b.m[2] + a.m[9]*b.m[6] + a.m[10]*b.m[10] + a.m[11]*b.m[14];
+  result.m[11] = a.m[8]*b.m[3] + a.m[9]*b.m[7] + a.m[10]*b.m[11] + a.m[11]*b.m[15];
+
+  // Row 4
+  result.m[12] = a.m[12]*b.m[0] + a.m[13]*b.m[4] + a.m[14]*b.m[8]  + a.m[15]*b.m[12];
+  result.m[13] = a.m[12]*b.m[1] + a.m[13]*b.m[5] + a.m[14]*b.m[9]  + a.m[15]*b.m[13];
+  result.m[14] = a.m[12]*b.m[2] + a.m[13]*b.m[6] + a.m[14]*b.m[10] + a.m[15]*b.m[14];
+  result.m[15] = a.m[12]*b.m[3] + a.m[13]*b.m[7] + a.m[14]*b.m[11] + a.m[15]*b.m[15];
+
+  return result; 
+}

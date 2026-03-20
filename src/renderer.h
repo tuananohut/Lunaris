@@ -19,10 +19,9 @@ constexpr TGAColor navy    = { 61,  23,  21, 255};
 constexpr TGAColor purple  = {152,  37, 152, 255};
 constexpr TGAColor grey    = {233, 233, 241, 255};
 
+void draw_line(Vector3 start_point, Vector3 end_point, TGAImage &framebuffer, TGAColor color);
 
-void draw_line(Vector2 start_point, Vector2 end_point, TGAImage &framebuffer, TGAColor color);
-
-void draw_triangle(Vector2 point1, Vector2 point2, Vector2 point3, TGAImage &framebuffer, TGAColor color);
+void draw_triangle(Vector3 point1, Vector3 point2, Vector3 point3, TGAImage &framebuffer, TGAColor color);
 
 Vector3 screen(const Vector3f &point); 
 Vector3f translate_z(Vector3f &point3f, float dz);
@@ -30,7 +29,7 @@ Vector3f translate_z(Vector3f &point3f, float dz);
 void render_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAColor color);
 void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAImage &zbuffer);
 
-void fill_triangle(Vector2 point1, Vector2 point2, Vector2 point3,
+void fill_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
 		   TGAImage &framebuffer, TGAColor color);
 void fill_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
                    TGAImage &framebuffer, TGAImage& zbuffer, TGAColor color);

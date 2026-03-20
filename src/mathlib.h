@@ -27,19 +27,7 @@ struct Vector3f { f64 c[3]; };
 struct Matrix3D { f64 m[9]; };
 struct Matrix4D { f64 m[16]; };
 
-Vector2 vec2(i32 x, i32 y);
-Vector2 vec2s(i32 x);
-Vector2 vec2_add(const Vector2 a, Vector2 b);
-Vector2 vec2_sub(Vector2 a, Vector2 b);
-Vector2 vec2_mul(Vector2 a, Vector2 b);
-Vector2 vec2_mul_scalar(Vector2 a, i32 s);
-Vector2 vec2_div(Vector2 a, Vector2 b);
-Vector2 vec2_div_scalar(Vector2 a, i32 s);
-Vector2 vec2_normalize(const Vector2 a);
-i32 vec2_dot(Vector2 a, Vector2 b);
-f64 vec2_magnitude(const Vector2 a);
 f64 cross_product(Vector2 a, Vector2 b);
-f64 signed_triangle_area(Vector2 a, Vector2 b, Vector2 c);
 
 ///////////////////////////////////////////////////////////
 
@@ -97,6 +85,7 @@ Matrix3D matrix3d_identity();
 Matrix3D matrix3d_rotation_x(f64 t); 
 Matrix3D matrix3d_rotation_y(f64 t); 
 Matrix3D matrix3d_rotation_z(f64 t);
+Matrix3D matrix3d_multiply(const Matrix3D a, const Matrix3D b); 
 
 ///////////////////////////////////////////////////////////
 
@@ -108,6 +97,8 @@ Matrix4D matrix4d_identity();
 Matrix4D matrix4d_rotation_x(f64 t); 
 Matrix4D matrix4d_rotation_y(f64 t); 
 Matrix4D matrix4d_rotation_z(f64 t); 
+Matrix4D matrix4d_multiply(const Matrix4D a, const Matrix4D b); 
 
 #endif
+
 
