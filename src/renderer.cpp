@@ -77,6 +77,8 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAImage &zbuff
 {
   f64 deg = 30.0;
   f64 rad = deg * DEG2RAD;
+
+  Matrix4D ModelView, Viewport, Perspective; 
   
   const Matrix3D rotation_matrix_x = matrix3d_rotation_x(rad);
   const Matrix3D rotation_matrix_y = matrix3d_rotation_y(rad);
@@ -88,8 +90,8 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAImage &zbuff
     {
       Vector3 face = buffer.faces[i];
 
-      Vector3 vertex0 = screen(mul_vec3f(rotate, buffer.vertices[face.c[X]]));   
-      Vector3 vertex1 = screen(mul_vec3f(rotate, buffer.vertices[face.c[Y]]));   
+      Vector3 vertex0 = screen(mul_vec3f(rotate, buffer.vertices[face.c[X]]));  
+      Vector3 vertex1 = screen(mul_vec3f(rotate, buffer.vertices[face.c[Y]]));  
       Vector3 vertex2 =	screen(mul_vec3f(rotate, buffer.vertices[face.c[Z]]));
 
       TGAColor rnd;
