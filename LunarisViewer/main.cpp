@@ -1,4 +1,4 @@
-#include "renderer.h"
+#include "../Lunaris/renderer.h"
 
 int main(int argc, char** argv)
 {  

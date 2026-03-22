@@ -27,7 +27,7 @@ jobs:
 
         if not exist build mkdir build
 
-        cl /EHsc src\*.cpp /Fe:build\rasterizer.exe
+        cl ..\Lunaris\src\*.cpp ..\LunarisViewer\*.cpp /openmp /EHsc /O2 /MD /Fe:build\rasterizer.exe
 
     - name: Run Rasterizer
       run: .\run.bat

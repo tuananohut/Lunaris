@@ -1,4 +1,4 @@
-#include "renderer.h"
+#include "../include/renderer.h"
 
 void draw_line(Vector3 p0, Vector3 p1, TGAImage &framebuffer, TGAColor color)
 {
@@ -39,28 +39,10 @@ void draw_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
   draw_line(point1, point3, framebuffer, color);
 }
 
-Vector3 screen(const Vector3f &point)
-{
-  // -1..1 => (after added 1) 0..2 => (divided 2) 0..1 => (multiplied width or height)0..w/h 
-
-  return
-    {
-      static_cast<int>((point.c[X] + 1.) / 2 * width),
-      static_cast<int>((point.c[Y] + 1.) / 2 * height),
-      static_cast<int>((point.c[Z] + 1.) * 255./2)
-    }; 
-}
-
-Vector3f translate_z(Vector3f &point3f, f32 dz)
-{
-  point3f.c[Z] += dz;
-  return point3f; 
-}
-
-// screen => project => translate_z
-
 void render_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAColor color)
 {
+  
+  
   for (i32 i = 0; i < buffer.face_count; i++)
     {
       Vector3 face = buffer.faces[i];

@@ -1,4 +1,4 @@
-#include "mathlib.h"
+#include "../include/mathlib.h"
 
 f64 cross_product(Vector2 a, Vector2 b)
 {

@@ -1,4 +1,4 @@
-#include "model.h"
+#include "../include/model.h"
 
 bool object_to_render(const char *filename, ModelBuffer &buffer)
 {

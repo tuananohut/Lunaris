@@ -23,9 +23,6 @@ void draw_line(Vector3 start_point, Vector3 end_point, TGAImage &framebuffer, TG
 
 void draw_triangle(Vector3 point1, Vector3 point2, Vector3 point3, TGAImage &framebuffer, TGAColor color);
 
-Vector3 screen(const Vector3f &point); 
-Vector3f translate_z(Vector3f &point3f, float dz);
-
 void render_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAColor color);
 void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAImage &zbuffer);
 
