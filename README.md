@@ -48,18 +48,16 @@ This project is currently a work in progress.
 
 ## Project Structure
 
+```text
 Lunaris/
-│
-├── Lunaris/        # Core rendering engine (math, rasterizer, pipeline)
+├── Lunaris/              # Core rendering engine
 │   ├── src/
 │   └── include/
 │
-├── LunarisViewer_Win32/  # Example application / viewer (Win32 platform)
-│   ├── main.cpp
-│   └── ...
+├── LunarisViewer/              # Win32 example app
+│   └── main.cpp
 │
-└── build.bat            # Build script
-
+└── build.bat
 
 ## Overview
 
