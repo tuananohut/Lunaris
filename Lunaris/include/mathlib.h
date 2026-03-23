@@ -21,7 +21,7 @@ const i32 W = 3;
 struct Vector2 { i32 c[2]; };
 struct Vector3 { i32 c[3]; };
 struct Vector4 { i32 c[4]; };
-
+ 
 struct Vector3f { f64 c[3]; };
 
 struct Matrix3D { f64 m[9]; };
@@ -98,6 +98,8 @@ Matrix4D matrix4d_rotation_x(f64 t);
 Matrix4D matrix4d_rotation_y(f64 t); 
 Matrix4D matrix4d_rotation_z(f64 t); 
 Matrix4D matrix4d_multiply(const Matrix4D a, const Matrix4D b); 
+Matrix4D matrix4d_translation(const Vector4 v); 
+Matrix4D matrix4d_scale(const Vector4 v); 
 
 #endif
 

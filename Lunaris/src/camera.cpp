@@ -2,14 +2,14 @@
 
 // -1..1 => (after added 1) 0..2 => (divided 2) 0..1 => (multiplied width or height)0..w/h 
 
-Matrix4D viewport(const Vector2 v, const i32 w, const i32 h)
+Matrix4D viewport(const Vector2 v)
 {
   Matrix4D Viewport =
     {
-      w/2., 0.0,   0.0, v.c[X] + w/2.0,
-      0.0,  h/2.0, 0.0, v.c[Y] + h/2.0,
-      0.0,  0.0,   1.0, 0.0,
-      0.0,  0.0,   0.0, 1.0,
+      width/2., 0.0,        0.0, v.c[X] + width/2.0,
+      0.0,      height/2.0, 0.0, v.c[Y] + height/2.0,
+      0.0,      0.0,        1.0, 0.0,
+      0.0,      0.0,        0.0, 1.0,
     };
   
   return Viewport; 

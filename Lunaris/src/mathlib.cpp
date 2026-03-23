@@ -525,3 +525,18 @@ Matrix4D matrix4d_multiply(const Matrix4D a, const Matrix4D b)
 
   return result; 
 }
+
+Matrix4D matrix4d_translation(const Vector3f v)
+{
+  Matrix4D matrix =
+    {
+      {
+        1.0, 0.0, 0.0, v.c[X],
+        0.0, 1.0, 0.0, v.c[Y],
+        0.0, 0.0, 1.0, v.c[Z],
+        0.0, 0.0, 0.0, 1.0,
+      }
+    };
+
+  return matrix; 
+}
