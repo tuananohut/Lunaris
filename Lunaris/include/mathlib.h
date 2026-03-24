@@ -99,7 +99,7 @@ Matrix4D matrix4d_rotation_y(f64 t);
 Matrix4D matrix4d_rotation_z(f64 t); 
 Matrix4D matrix4d_multiply(const Matrix4D a, const Matrix4D b); 
 Matrix4D matrix4d_translation(const Vector4 v); 
-Matrix4D matrix4d_scale(const Vector4 v); 
+Matrix4D matrix4d_scale(const Vector4 v);
 
 #endif
 

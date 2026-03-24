@@ -8,5 +8,6 @@ const int height = 1080;
 
 void viewport(const Vector4 vec4); 
 Matrix4D perspective(const double f64);
+Matrix4D lookat(const Vector3f eye, const Vector3f center, const Vector3f up);
 
 #endif
