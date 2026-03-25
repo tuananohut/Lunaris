@@ -32,15 +32,19 @@ Matrix4D perspective(const f64 f)
  
 Matrix4D lookat(const Vector3f eye, const Vector3f center, const Vector3f up)
 {
-  Matrix4D model_view; 
+  Matrix4D model_view;
+
+  Vector3f n = vec3f_normalize(vec3f_sub(eye, center));
+  Vector3f l = vec3f_normalize(cross_product(up, n));
+  Vector3f m = vec3f_normalize(cross_product(n, l));
 
   Matrix4D eye_up_center =
     {
       {
-        l.x, l.y, l.z, 0.0,
-        m.x, m.y, m.z, 0.0,
-        n.x, n.y, n.z, 0.0,
-        0.0, 0.0, 0.0, 1.0, 
+        l.c[X], l.c[Y], l.c[Z], 0.0,
+        m.c[X], m.c[Y], m.c[Z], 0.0,
+        n.c[X], n.c[Y], n.c[Z], 0.0,
+        0.0,    0.0,    0.0,    1.0, 
       } 
     };
 
@@ -54,11 +58,7 @@ Matrix4D lookat(const Vector3f eye, const Vector3f center, const Vector3f up)
       }
     };
   
-  vec3 n = vec3_normalize(eye-center);
-  vec3 l = vec3_normalize(cross_product(up,n));
-  vec3 m = vec3_normalize(cross_product(n, l));
+  model_view = matrix4d_multiply(eye_up_center, center_matrix);
 
-  ModelView = matrix4d_multiply(eye_up_center, center_matrix);
-
-  return ModelView; 
+  return model_view; 
 }

@@ -41,7 +41,7 @@ void draw_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
 
 void render_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAColor color)
 {
-  
+  Matrix4D ModelView, Viewport, Perspective; 
   
   for (i32 i = 0; i < buffer.face_count; i++)
     {
@@ -60,7 +60,7 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAImage &zbuff
   f64 deg = 30.0;
   f64 rad = deg * DEG2RAD;
 
-  Matrix4D ModelView, Viewport, Perspective; 
+  Matrix4D ModelView, Viewport, Perspective;
   
   const Matrix3D rotation_matrix_x = matrix3d_rotation_x(rad);
   const Matrix3D rotation_matrix_y = matrix3d_rotation_y(rad);

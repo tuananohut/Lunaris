@@ -189,6 +189,17 @@ Vector3f perspective(Vector3f v)
   return vec3f_div_scalar(v, (1 - v.c[Z] / c));
 }
 
+Vector3f cross_product(Vector3f a, Vector3f b)
+{
+  Vector3f result;
+
+  result.c[X] = a.c[Y]*b.c[Z] - a.c[Z]*b.c[Y];  
+  result.c[Y] = a.c[Z]*b.c[X] - a.c[X]*b.c[Z];
+  result.c[Z] = a.c[X]*b.c[Y] - a.c[Y]*b.c[X]; 
+
+  return result; 
+}
+
 f64 vec3f_dot(Vector3f a, Vector3f b)
 {
     return a.c[X]*b.c[X] +
