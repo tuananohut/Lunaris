@@ -2,6 +2,7 @@
 #define RENDERER_H
 
 #include <cmath>
+#include <algorithm>
 #include "model.h"
 #include "tgaimage.h"
 #include "mathlib.h"
