@@ -7,9 +7,6 @@
 #include "tgaimage.h"
 #include "mathlib.h"
 
-constexpr i32 width  = 1080;			  
-constexpr i32 height = 1080;
-
 constexpr TGAColor white   = {255, 255, 255, 255}; // attention, BGRA order
 constexpr TGAColor green   = {  0, 255,   0, 255};
 constexpr TGAColor red     = {  0,   0, 255, 255};
@@ -27,8 +24,9 @@ void draw_triangle(Vector3 point1, Vector3 point2, Vector3 point3, TGAImage &fra
 void render_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAColor color);
 void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAImage &zbuffer);
 
-void fill_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
-		   TGAImage &framebuffer, TGAColor color);
+void fill_triangle(const int width, const int height,
+                   Vector3 point1, Vector3 point2, Vector3 point3,
+                   TGAImage &framebuffer, TGAColor color);
 void fill_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
                    TGAImage &framebuffer, TGAImage& zbuffer, TGAColor color);
 

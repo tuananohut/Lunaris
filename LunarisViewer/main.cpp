@@ -1,7 +1,10 @@
 #include "../Lunaris/renderer.h"
 
 int main(int argc, char** argv)
-{  
+{
+  constexpr i32 width  = 1080;			  
+  constexpr i32 height = 1080;
+  
   TGAImage framebuffer(width, height, TGAImage::RGB);
   TGAImage zbuffer(width, height, TGAImage::GRAYSCALE);
   
