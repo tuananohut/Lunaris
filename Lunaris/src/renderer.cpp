@@ -173,11 +173,22 @@ void fill_triangle(const Vector4 clip[3], TGAImage &framebuffer,
       screen[i] = result2d; 
     }
 
-  
+  Vector4 A = mul_vec4(Viewport, normalized_device_coordinates[0]);
+  Vector4 B = mul_vec4(Viewport, normalized_device_coordinates[1]);
+  Vector4 C = mul_vec4(Viewport, normalized_device_coordinates[2]);
+
+  Vector2 a = vec2(A.c[X], A.c[Y]); 
+  Vector2 b = vec2(B.c[X], B.c[Y]); 
+  Vector2 c = vec2(C.c[X], C.c[Y]);
+
+  Vector2 screen[3] = { a, b, c }; 
+ 
   Matrix3D ABC =
     {
       {
-        
+        screen[0].x, screen[0].y, 1.f,
+        screen[1].x, screen[1].y, 1.f,
+        screen[2].x, screen[2].y, 1.f,
       }
     }; 
 

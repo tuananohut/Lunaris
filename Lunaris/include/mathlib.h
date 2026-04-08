@@ -31,6 +31,10 @@ f64 cross_product(Vector2 a, Vector2 b);
 
 ///////////////////////////////////////////////////////////
 
+Vector2 vec2(i32 x, i32 y);
+
+///////////////////////////////////////////////////////////
+
 Vector3 vec3(i32 x, i32 y, i32 z);
 Vector3 vec3s(i32 x);
 Vector3 vec3_add(Vector3 a, Vector3 b);
