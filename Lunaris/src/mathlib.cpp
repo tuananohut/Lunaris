@@ -424,6 +424,20 @@ Matrix3D matrix3d_multiply(const Matrix3D a, const Matrix3D b)
   return result; 
 }
 
+Matrix3D matrix3d_transpose(const Matrix3D a)
+{
+  Matrix3D matrix =
+    {
+      {
+        a.m[0], a.m[3], a.m[6], 
+        a.m[1], a.m[4], a.m[7], 
+        a.m[2], a.m[5], a.m[8], 
+      }
+    };
+
+  return matrix; 
+}
+
 
 ///////////////////////////////////////////////////////////
 
@@ -555,6 +569,21 @@ Matrix4D matrix4d_translation(const Vector3f v)
         0.0, 1.0, 0.0, v.c[Y],
         0.0, 0.0, 1.0, v.c[Z],
         0.0, 0.0, 0.0, 1.0,
+      }
+    };
+
+  return matrix; 
+}
+
+Matrix4D matrix4d_transpose(const Matrix4D a)
+{
+  Matrix4D matrix =
+    {
+      {
+        a.m[0], a.m[4],  a.m[8], a.m[12], 
+        a.m[1], a.m[5],  a.m[9], a.m[13],
+        a.m[2], a.m[6], a.m[10], a.m[14],
+        a.m[3], a.m[7], a.m[11], a.m[15],
       }
     };
 

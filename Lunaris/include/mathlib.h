@@ -61,6 +61,7 @@ Vector3f vec3f_div(Vector3f a, Vector3f b);
 Vector3f vec3f_div_scalar(Vector3f a, f64 s);
 Vector3f vec3f_normalize(const Vector3f a);
 Vector3f mul_vec3f(Matrix3D m, Vector3f v);
+Vector3f vec3f_crossproduct(const Vector3f& a, const Vector3f& b); 
 Vector3f perspective(Vector3f v);
 Vector3f cross_product(Vector3f a, Vector3f b);
 f64 vec3f_dot(Vector3f a, Vector3f b);
@@ -91,6 +92,7 @@ Matrix3D matrix3d_rotation_x(f64 t);
 Matrix3D matrix3d_rotation_y(f64 t); 
 Matrix3D matrix3d_rotation_z(f64 t);
 Matrix3D matrix3d_multiply(const Matrix3D a, const Matrix3D b); 
+Matrix3D matrix3d_transpose(const Matrix3D a);
 
 ///////////////////////////////////////////////////////////
 
@@ -105,6 +107,7 @@ Matrix4D matrix4d_rotation_z(f64 t);
 Matrix4D matrix4d_multiply(const Matrix4D a, const Matrix4D b); 
 Matrix4D matrix4d_translation(const Vector4 v); 
 Matrix4D matrix4d_scale(const Vector4 v);
+Matrix4D matrix4d_transpose(const Matrix4D a); 
 
 #endif
 

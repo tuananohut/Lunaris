@@ -152,7 +152,8 @@ void fill_triangle(const int width, const int height,
     }
 }
 
-void fill_triangle(const Vector4 clip[3], TGAImage &framebuffer,
+void fill_triangle(const int width, const int height,
+                   const Vector4 clip[3], TGAImage &framebuffer,
                    TGAImage &zbuffer, TGAColor color)
 {
   Vector4 normalized_device_coordinates[3] =
@@ -164,15 +165,6 @@ void fill_triangle(const Vector4 clip[3], TGAImage &framebuffer,
     
   Vector2 screen[3] = {0}; 
   
-  for (size_t i = 0; i < 3; ++i)
-    {
-      Vector4 result4d = mul_vec4(Viewport, normalized_device_coordinates[i]); 
-      Vector2 result2d;
-      result2d.c[X] = result4d.c[X];
-      result2d.c[Y] = result4d.c[Y]; 
-      screen[i] = result2d; 
-    }
-
   Vector4 A = mul_vec4(Viewport, normalized_device_coordinates[0]);
   Vector4 B = mul_vec4(Viewport, normalized_device_coordinates[1]);
   Vector4 C = mul_vec4(Viewport, normalized_device_coordinates[2]);
@@ -181,47 +173,49 @@ void fill_triangle(const Vector4 clip[3], TGAImage &framebuffer,
   Vector2 b = vec2(B.c[X], B.c[Y]); 
   Vector2 c = vec2(C.c[X], C.c[Y]);
 
-  Vector2 screen[3] = { a, b, c }; 
- 
+  screen[0] = { A.c[X], A.c[Y] };
+  screen[1] = { B.c[X], B.c[Y] };
+  screen[2] = { C.c[X], C.c[Y] };
+  
   Matrix3D ABC =
     {
       {
-        screen[0].x, screen[0].y, 1.f,
-        screen[1].x, screen[1].y, 1.f,
-        screen[2].x, screen[2].y, 1.f,
+        static_cast<f64>(screen[0].c[X]), static_cast<f64>(screen[0].c[Y]), 1.,
+        static_cast<f64>(screen[1].c[X]), static_cast<f64>(screen[1].c[Y]), 1.,
+        static_cast<f64>(screen[2].c[X]), static_cast<f64>(screen[2].c[Y]), 1.,
       }
     }; 
+  
+  auto bbminx = std::min({ screen[0].c[X], screen[1].c[X], screen[2].c[X] }); 
+  auto bbmaxx = std::max({ screen[0].c[X], screen[1].c[X], screen[2].c[X] }); 
 
-  auto [bbminx, bbmaxx] = std::minmax({screen[0].c[X], screen[1].c[X], screen[2].c[X]});
-  auto [bbminy, bbmaxy] = std::minmax({screen[0].c[Y], screen[1].c[Y], screen[2].c[Y]});
+  auto bbminy = std::min({ screen[0].c[Y], screen[1].c[Y], screen[2].c[Y] }); 
+  auto bbmaxy = std::max({ screen[0].c[Y], screen[1].c[Y], screen[2].c[Y] }); 
 
   bbminx = std::max(0, bbminx);
   bbmaxx = std::min(width-1, bbmaxx);
   bbminy = std::max(0, bbminy);
   bbmaxy = std::min(height-1, bbmaxy);
-  
-  f64 total_area = signed_triangle_area(point1, point2, point3);
-  if (total_area < 1)
-    return; // backface culling + discarding triangles that cover less than a pixel
 
 #pragma omp parallel for
   for (i32 y = bbminy; y <= bbmaxy; y++)
     {
       for (i32 x = bbminx; x <= bbmaxx; x++)
         {
-          Vector3 point = {x, y, 0};
-          f64 alpha = signed_triangle_area(point, point2, point3) / total_area; 
-          f64 beta  = signed_triangle_area(point, point3, point1) / total_area; 
-          f64 gamma = signed_triangle_area(point, point1, point2) / total_area;
-          
-          if (alpha < 0 || beta < 0 || gamma < 0)
+          Vector3f point = {static_cast<f64>(x), static_cast<f64>(y), 1.};
+          Vector3f barycentric = mul_vec3f(ABC, point); 
+                    
+          if (barycentric.c[X] < 0 || barycentric.c[Y] < 0 || barycentric.c[Z] < 0)
             continue;
 
-          unsigned char z = static_cast<unsigned char>(alpha * point1.c[Z] + beta * point2.c[Z] + gamma * point3.c[Z]);
-          if (z <= zbuffer.get(x, y)[0])
+          f64 z = vec3f_crossproduct(barycentric, vec3f(normalized_device_coordinates[0].c[Z],
+                                                        normalized_device_coordinates[1].c[Z],
+                                                        normalized_device_coordinates[2].c[Z])); 
+
+          if (z <= zbuffer[x+y*framebuffer.width()])
             continue;
           
-          zbuffer.set(x, y, {z});  
+          zbuffer[x+y*framebuffer.width()] = z;
           framebuffer.set(x, y, color);
         }
     }

@@ -24,9 +24,10 @@ void draw_triangle(Vector3 point1, Vector3 point2, Vector3 point3, TGAImage &fra
 void render_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAColor color);
 void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAImage &zbuffer);
 
+
 void fill_triangle(const int width, const int height,
-                   Vector3 point1, Vector3 point2, Vector3 point3,
-                   TGAImage &framebuffer, TGAColor color);
+                   const Vector4 clip[3], TGAImage &framebuffer,
+                   TGAImage &zbuffer, TGAColor color);
 void fill_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
                    TGAImage &framebuffer, TGAImage& zbuffer, TGAColor color);
 
