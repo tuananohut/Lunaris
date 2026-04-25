@@ -3,9 +3,11 @@
 
 #include <cmath>
 #include <algorithm>
+#include <vector>
 #include "model.h"
 #include "tgaimage.h"
 #include "mathlib.h"
+#include "camera.h"
 
 constexpr TGAColor white   = {255, 255, 255, 255}; // attention, BGRA order
 constexpr TGAColor green   = {  0, 255,   0, 255};
@@ -27,8 +29,9 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAImage &zbuff
 
 void fill_triangle(const int width, const int height,
                    const Vector4 clip[3], TGAImage &framebuffer,
-                   TGAImage &zbuffer, TGAColor color);
-void fill_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
-                   TGAImage &framebuffer, TGAImage& zbuffer, TGAColor color);
+                   std::vector<f64> &zbuffer, TGAColor color);
+
+/* void fill_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
+   TGAImage &framebuffer, TGAImage& zbuffer, TGAColor color); */
 
 #endif

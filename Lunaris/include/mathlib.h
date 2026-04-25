@@ -23,6 +23,7 @@ struct Vector3 { i32 c[3]; };
 struct Vector4 { i32 c[4]; };
  
 struct Vector3f { f64 c[3]; };
+struct Vector4f { f64 c[4]; };
 
 struct Matrix3D { f64 m[9]; };
 struct Matrix4D { f64 m[16]; };
@@ -81,6 +82,21 @@ Vector4 vec4_normalize(const Vector4 a);
 Vector4 mul_vec4(Matrix4D m, Vector4 v);
 i32 vec4_dot(Vector4 a, Vector4 b);
 f64 vec4_magnitude(const Vector4 a);
+
+///////////////////////////////////////////////////////////
+
+Vector4f vec4f(f64 x, f64 y, f64 z, f64 w);
+Vector4f vec4fs(f64 x);
+Vector4f vec4f_add(Vector4f a, Vector4f b);
+Vector4f vec4f_sub(Vector4f a, Vector4f b);
+Vector4f vec4f_mul(Vector4f a, Vector4f b);
+Vector4f vec4f_mul_scalar(Vector4f a, f64 s);
+Vector4f vec4f_div(Vector4f a, Vector4f b);
+Vector4f vec4f_div_scalar(Vector4f a, f64 s);
+Vector4f vec4f_normalize(const Vector4f a);
+Vector4f mul_vec4f(Matrix4D m, Vector4f v);
+f64 vec4f_dot(Vector4f a, Vector4f b);
+f64 vec4f_magnitude(const Vector4f a);
 
 ///////////////////////////////////////////////////////////
 

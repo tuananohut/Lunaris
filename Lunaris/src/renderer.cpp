@@ -57,6 +57,19 @@ void render_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAColor color)
 
 void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAImage &zbuffer)
 {
+  constexpr Vector3f    eye = { -1.0, 0.0, 2.0 };
+  constexpr Vector3f center = {  0.0, 0.0, 0.0 };
+  constexpr Vector3f     up = {  0.0, 1.0, 0.0 };
+
+  const i32 width  = 1080; 
+  const i32 height = 1080;
+
+  const Vector2 v = { width*7/8, height*7/8 }; 
+  
+  ModelView = lookat(eye, center, up);
+  Perspective = perspective(vec3f_magnitude(vec3f_sub(eye, center)));
+  Viewport = viewport(width/16, height/16, v);   
+  
   f64 deg = 30.0;
   f64 rad = deg * DEG2RAD;
   
@@ -65,20 +78,32 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAImage &zbuff
   const Matrix3D rotation_matrix_z = matrix3d_rotation_z(rad);
 
   Matrix3D rotate = matrix3d_multiply(rotation_matrix_x, rotation_matrix_z);  
+
+  Vector4 clip[3];
   
   for (i32 i = 0; i < buffer.face_count; i++)
     {
       Vector3 face = buffer.faces[i];
+      
+      // Vector3 vertex0 = screen(mul_vec3f(rotate, buffer.vertices[face.c[X]]));  
+      // Vector3 vertex1 = screen(mul_vec3f(rotate, buffer.vertices[face.c[Y]]));  
+      // Vector3 vertex2 = screen(mul_vec3f(rotate, buffer.vertices[face.c[Z]]));
 
-      Vector3 vertex0 = screen(mul_vec3f(rotate, buffer.vertices[face.c[X]]));  
-      Vector3 vertex1 = screen(mul_vec3f(rotate, buffer.vertices[face.c[Y]]));  
-      Vector3 vertex2 =	screen(mul_vec3f(rotate, buffer.vertices[face.c[Z]]));
-
+      Vector3f vertex0 = buffer.vertices[face.c[X]];
+      Vector3f vertex1 = buffer.vertices[face.c[Y]];
+      Vector3f vertex2 = buffer.vertices[face.c[Z]];
+      
+      Matrix4D view_matrix  = mul_vec4f(ModelView, model);
+      Matrix4D world_matrix = matrix4d_multiply(Perspective, view_matrix); 
+      
+      
+      
       TGAColor rnd;
       for (i32 c = 0; c < 3; c++)
         rnd[c] = std::rand()%255;
 
-      fill_triangle(vertex0, vertex1, vertex2, framebuffer, zbuffer, rnd); 
+      
+      fill_triangle(width, height, clip, framebuffer, zbuffer, rnd); 
     }
 }
 
@@ -154,7 +179,7 @@ void fill_triangle(const int width, const int height,
 
 void fill_triangle(const int width, const int height,
                    const Vector4 clip[3], TGAImage &framebuffer,
-                   TGAImage &zbuffer, TGAColor color)
+                   std::vector<f64> &zbuffer[], TGAColor color)
 {
   Vector4 normalized_device_coordinates[3] =
   {
@@ -208,9 +233,9 @@ void fill_triangle(const int width, const int height,
           if (barycentric.c[X] < 0 || barycentric.c[Y] < 0 || barycentric.c[Z] < 0)
             continue;
 
-          f64 z = vec3f_crossproduct(barycentric, vec3f(normalized_device_coordinates[0].c[Z],
-                                                        normalized_device_coordinates[1].c[Z],
-                                                        normalized_device_coordinates[2].c[Z])); 
+          f64 z = vec3f_dot(barycentric, vec3f(normalized_device_coordinates[0].c[Z],
+                                               normalized_device_coordinates[1].c[Z],
+                                               normalized_device_coordinates[2].c[Z])); 
 
           if (z <= zbuffer[x+y*framebuffer.width()])
             continue;

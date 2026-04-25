@@ -320,6 +320,101 @@ f64 vec4_magnitude(const Vector4 a)
 
 ///////////////////////////////////////////////////////////
 
+Vector4f vec4f(f64 x, f64 y, f64 z, f64 w)
+{
+  Vector4f v = {{ x, y, z, w }}; 
+  return v;
+}
+
+Vector4f vec4fs(f64 x)
+{
+  return vec4f(x, x, x, x); 
+}
+
+Vector4f vec4f_add(Vector4f a, Vector4f b)
+{
+  for (size_t i = 0; i < 4; ++i)
+      a.c[i] += b.c[i];
+  
+  return a;
+}
+
+Vector4f vec4f_sub(Vector4f a, Vector4f b)
+{
+  for (size_t i = 0; i < 4; ++i)
+      a.c[i] -= b.c[i];
+  
+  return a;
+}
+
+Vector4f vec4f_mul(Vector4f a, Vector4f b)
+{
+  for (size_t i = 0; i < 4; ++i)
+      a.c[i] *= b.c[i];
+  
+  return a;
+}
+
+Vector4f vec4f_mul_scalar(Vector4f a, f64 s)
+{
+  for (size_t i = 0; i < 4; ++i)
+    a.c[i] *= s;
+  
+  return a;
+}
+
+Vector4f vec4f_div(Vector4f a, Vector4f b)
+{
+  for (size_t i = 0; i < 4; ++i)
+      a.c[i] /= b.c[i];
+  
+  return a;
+}
+
+Vector4f vec4f_div_scalar(Vector4f a, f64 s)
+{
+  s = 1.f / s; 
+  for (size_t i = 0; i < 4; ++i)
+    a.c[i] *= s;
+  
+  return a;
+}
+
+Vector4f vec4f_normalize(const Vector4f a)
+{
+  return vec4f_div_scalar(a, vec4f_magnitude(a));
+}
+
+Vector4f mul_vec4f(Matrix4D m, Vector4f v)
+{
+  Vector4f r;
+  
+  r.c[X] =  m.m[0]*v.c[X]  +  m.m[1]*v.c[Y] +  m.m[2]*v.c[Z] +  m.m[3]*v.c[W];
+  r.c[Y] =  m.m[4]*v.c[X]  +  m.m[5]*v.c[Y] +  m.m[6]*v.c[Z] +  m.m[7]*v.c[W];
+  r.c[Z] =  m.m[8]*v.c[X]  +  m.m[9]*v.c[Y] + m.m[10]*v.c[Z] + m.m[11]*v.c[W];
+  r.c[W] = m.m[12]*v.c[X]  + m.m[13]*v.c[Y] + m.m[14]*v.c[Z] + m.m[15]*v.c[W];
+
+  return r;
+}
+
+f64 vec4f_dot(Vector4f a, Vector4f b)
+{
+    return a.c[X] * b.c[X] +
+           a.c[Y] * b.c[Y] +
+           a.c[Z] * b.c[Z] +
+           a.c[W] * b.c[W];
+}
+
+f64 vec4f_magnitude(const Vector4f a)
+{
+  return std::sqrt(a.c[X] * a.c[X] +
+                   a.c[Y] * a.c[Y] +
+                   a.c[Z] * a.c[Z] +
+                   a.c[W] * a.c[W]); 
+}
+
+///////////////////////////////////////////////////////////
+
 Matrix3D matrix3d(f32 n00, f32 n01, f32 n02, 
                   f32 n10, f32 n11, f32 n12, 
                   f32 n20, f32 n21, f32 n22)
