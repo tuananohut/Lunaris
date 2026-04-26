@@ -12,23 +12,37 @@ In other words, the project acts as a software-based camera and renderer for 3D 
 
 ### Wireframe
 
-![African Head](images/african_head.png)
-
-![Bunny](images/bunny.png)
-
-![Penger](images/penger.png)
-
-![Teapot](images/teapot.png)
+<table>
+  <tr>
+    <td><img src="images/african_head.png" alt="African Head" width="250"/></td>
+    <td><img src="images/bunny.png" alt="Bunny" width="250"/></td>
+    <td><img src="images/penger.png" alt="Penger" width="250"/></td>
+    <td><img src="images/teapot.png" alt="Teapot" width="250"/></td>
+  </tr>
+  <tr>
+    <td align="center">African Head</td>
+    <td align="center">Bunny</td>
+    <td align="center">Penger</td>
+    <td align="center">Teapot</td>
+  </tr>
+</table>
 
 ### Rasterization
 
-![African Head](images/rasterization_african_head.png)
-                       
-![Bunny](images/rasterization_bunny.png)
-
-![Penger](images/rasterization_penger.png)
-
-![Teapot](images/rasterization_teapot.png)
+<table>
+  <tr>
+    <td><img src="images/camera_rasterization_african_head.png" alt="African Head" width="250"/></td>
+    <td><img src="images/camera_rasterization_bunny.png" alt="Bunny" width="250"/></td>
+    <td><img src="images/camera_rasterization_penger.png" alt="Penger" width="250"/></td>
+    <td><img src="images/camera_rasterization_teapot.png" alt="Teapot" width="250"/></td>
+  </tr>
+  <tr>
+    <td align="center">African Head</td>
+    <td align="center">Bunny</td>
+    <td align="center">Penger</td>
+    <td align="center">Teapot</td>
+  </tr>
+</table>
 
 ---
 
@@ -43,6 +57,7 @@ This project is currently a work in progress.
 - Triangle rasterization
 - Backface culling
 - Custom math library
+- Camera 
 
 ---
 
