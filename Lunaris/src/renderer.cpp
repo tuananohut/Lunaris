@@ -83,6 +83,8 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, std::vector<f64
 
   Vector4f clip[3];
 
+  Shader random_shader; 
+
   for (i32 i = 0; i < buffer.face_count; i++)
     {
       Vector3 face = buffer.faces[i];
@@ -102,13 +104,14 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, std::vector<f64
       for (i32 c = 0; c < 3; c++)
         rnd[c] = std::rand()%255;
       
-      fill_triangle(width, height, clip, framebuffer, zbuffer, rnd); 
+      fill_triangle(width, height, clip, framebuffer, random_shader); 
     }
 }
 
+
 void fill_triangle(const int width, const int height,
                    const Vector4f clip[3], TGAImage &framebuffer,
-                   std::vector<f64> &zbuffer, TGAColor color)
+                   const Shader &shader)
 {
   Vector4f normalized_device_coordinates[3] =
   {
@@ -164,9 +167,13 @@ void fill_triangle(const int width, const int height,
           f64 z = alpha * normalized_device_coordinates[0].c[Z] + 
                   beta  * normalized_device_coordinates[1].c[Z] + 
                   gamma * normalized_device_coordinates[2].c[Z]; 
-
+    
           if (z <= zbuffer[x + y * framebuffer.width()])
             continue;
+
+          auto [discard, color] = random_shader.fragment(bc);
+          if (discard)
+            continue;  
           
           zbuffer[x + y * framebuffer.width()] = z;
           framebuffer.set(x, y, color);

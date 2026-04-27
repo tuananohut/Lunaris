@@ -19,6 +19,11 @@ constexpr TGAColor navy    = { 61,  23,  21, 255};
 constexpr TGAColor purple  = {152,  37, 152, 255};
 constexpr TGAColor grey    = {233, 233, 241, 255};
 
+struct Shader
+{
+  virtual std::pair<bool, TGAColor> fragment(const Vector3f bar) const = 0;
+};
+
 void draw_line(Vector3 start_point, Vector3 end_point, TGAImage &framebuffer, TGAColor color);
 
 void draw_triangle(Vector3 point1, Vector3 point2, Vector3 point3, TGAImage &framebuffer, TGAColor color);
@@ -28,6 +33,6 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, std::vector<f64
 
 void fill_triangle(const int width, const int height,
                    const Vector4f clip[3], TGAImage &framebuffer,
-                   std::vector<f64> &zbuffer, TGAColor color);
+                   const Shader &shader);
 
 #endif

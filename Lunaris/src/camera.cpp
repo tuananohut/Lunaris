@@ -62,3 +62,8 @@ Matrix4D lookat(const Vector3f eye, const Vector3f center, const Vector3f up)
 
   return model_view; 
 }
+
+std::vector<f64> init_zbuffer(const int width, const int height)
+{
+  return std::vector<f64>(width*height, -1000.0); 
+}
