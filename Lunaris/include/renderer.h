@@ -19,9 +19,19 @@ constexpr TGAColor navy    = { 61,  23,  21, 255};
 constexpr TGAColor purple  = {152,  37, 152, 255};
 constexpr TGAColor grey    = {233, 233, 241, 255};
 
+
 struct Shader
 {
-  virtual std::pair<bool, TGAColor> fragment(const Vector3f bar) const = 0;
+    TGAColor fragment(const Vector3f& bar) const
+    {
+      TGAColor color; 
+      color[0] = 255; 
+      color[1] = 255; 
+      color[2] = 255; 
+      color[3] = 255; 
+
+      return color; 
+    }
 };
 
 void draw_line(Vector3 start_point, Vector3 end_point, TGAImage &framebuffer, TGAColor color);
