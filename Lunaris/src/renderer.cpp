@@ -1,6 +1,7 @@
 #include "../include/renderer.h"
 
 Matrix4D ModelView, Viewport, Perspective;
+std::vector<double> zbuffer;
 
 void draw_line(Vector3 p0, Vector3 p1, TGAImage &framebuffer, TGAColor color)
 {
@@ -83,12 +84,12 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, std::vector<f64
 
   Vector4f clip[3];
 
-  Shader shader; 
+  Shader fragment; 
 
   for (i32 i = 0; i < buffer.face_count; i++)
     {
       Vector3 face = buffer.faces[i];
-     
+      
       for (i32 d = 0; d < 3; d++)
         {
           Vector3f vertex = buffer.vertices[buffer.faces[i].c[d]];
