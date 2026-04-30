@@ -30,8 +30,9 @@ jobs:
         cl Lunaris\src\*.cpp LunarisViewer\*.cpp /openmp /EHsc /O2 /MD /Fe:build\rasterizer.exe
 
     - name: Run Rasterizer
-      run: .\run.bat
-      shell: cmd
+    shell: cmd
+    run: build\rasterizer.exe
+      
 
     - name: Upload Render Output
       uses: actions/upload-artifact@v4
