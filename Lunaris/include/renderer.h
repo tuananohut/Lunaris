@@ -19,19 +19,55 @@ constexpr TGAColor navy    = { 61,  23,  21, 255};
 constexpr TGAColor purple  = {152,  37, 152, 255};
 constexpr TGAColor grey    = {233, 233, 241, 255};
 
+extern Matrix4D ModelView;
+extern Matrix4D Perspective;
+extern Matrix4D Viewport;
 
 struct Shader
 {
-    TGAColor fragment(const Vector3f& bar) const
-    {
-      TGAColor color; 
-      color[0] = 255; 
-      color[1] = 255; 
-      color[2] = 255; 
-      color[3] = 255; 
+  TGAColor fragment(const Vector3f& bar) const
+  {
+    TGAColor color; 
+    color[0] = 255; 
+    color[1] = 255; 
+    color[2] = 255; 
+    color[3] = 255; 
 
-      return color; 
-    }
+    return color; 
+  }
+};
+
+struct RandomShader
+{
+  const ModelBuffer& model;
+  TGAColor color = {};
+  Vector3f tri[3];
+
+  RandomShader(const ModelBuffer& m) : model(m) {}
+
+  Vector4f vertex(int face, int vert)
+  {
+    Vector3f v = buffer.vertices[buffer.faces[face].c[vert]];
+
+    Vector4f model_pos =
+      {
+        v.c[X],
+        v.c[Y],
+        v.c[Z],
+        1.0
+      };
+
+    Vector4f view = mul_vec4f(ModelView, model_pos);
+
+    tri[vert] = { view.c[X], view.c[Y], view.c[Z] };
+
+    return mul_vec4f(Perspective, view);
+  }
+
+  TGAColor fragment(const Vector3f& bar) const
+  {
+    return color;
+  }
 };
 
 void draw_line(Vector3 start_point, Vector3 end_point, TGAImage &framebuffer, TGAColor color);
