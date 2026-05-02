@@ -3,6 +3,30 @@
 Matrix4D ModelView, Viewport, Perspective;
 std::vector<double> zbuffer;
 
+Vector4f RandomShader::vertex(int face, int vert)
+{
+  Vector3f v = model.vertices[model.faces[face].c[vert]];
+
+  Vector4f model_pos =
+    {
+      v.c[X],
+      v.c[Y],
+      v.c[Z],
+      1.0
+    };
+
+  Vector4f view = mul_vec4f(ModelView, model_pos);
+
+  tri[vert] = { view.c[X], view.c[Y], view.c[Z] };
+
+  return mul_vec4f(Perspective, view);
+}
+
+TGAColor RandomShader::fragment(const Vector3f& bar) const
+{
+  return color;
+}
+
 void draw_line(Vector3 p0, Vector3 p1, TGAImage &framebuffer, TGAColor color)
 {
   bool steep = std::abs(p0.c[X] - p1.c[X]) < std::abs(p0.c[Y] - p1.c[Y]);
@@ -85,7 +109,7 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, std::vector<f64
   Vector4f clip[3];
 
   Shader fragment; 
-
+  
   for (i32 i = 0; i < buffer.face_count; i++)
     {
       Vector3 face = buffer.faces[i];
