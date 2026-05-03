@@ -24,7 +24,7 @@ Vector4f RandomShader::vertex(int face, int vert)
 
 TGAColor RandomShader::fragment(const Vector3f& bar) const
 {
-  return color;
+  return { 255, 255, 0, 255 };  
 }
 
 void draw_line(Vector3 p0, Vector3 p1, TGAImage &framebuffer, TGAColor color)
@@ -108,11 +108,23 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, std::vector<f64
 
   Vector4f clip[3];
 
-  Shader fragment; 
+  TGAColor clean = {0, 0, 0, 255};
+
+  for (int y = 0; y < framebuffer.height(); y++)
+    {
+      for (int x = 0; x < framebuffer.width(); x++)
+        {
+          framebuffer.set(x, y, clean);
+        }
+    }
+
+  zbuffer.resize(width * height);
+  std::fill(zbuffer.begin(), zbuffer.end(), -1e9);
   
   for (i32 i = 0; i < buffer.face_count; i++)
     {
       Vector3 face = buffer.faces[i];
+      RandomShader shader(buffer); 
       
       for (i32 d = 0; d < 3; d++)
         {
@@ -124,19 +136,15 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, std::vector<f64
 
           clip[d] = world;
         }
-
-      TGAColor rnd;
-      for (i32 c = 0; c < 3; c++)
-        rnd[c] = std::rand()%255;
       
-      fill_triangle(width, height, clip, framebuffer, fragment); 
+      fill_triangle(width, height, clip, framebuffer, shader); 
     }
 }
 
 
 void fill_triangle(const int width, const int height,
                    const Vector4f clip[3], TGAImage &framebuffer,
-                   const Shader &shader)
+                   const RandomShader &shader)
 {
   Vector4f normalized_device_coordinates[3] =
   {
@@ -174,7 +182,7 @@ void fill_triangle(const int width, const int height,
   f64 total_area = signed_area(screen[0], screen[1], screen[2]);
   if (std::abs(total_area) < 1e-5)
     return;
-
+  
 #pragma omp parallel for
   for (i32 y = bbminy; y <= bbmaxy; y++)
     {
