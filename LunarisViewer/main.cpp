@@ -1,4 +1,5 @@
 #include "../Lunaris/include/renderer.h"
+#include <iostream>
 
 int main(int argc, char** argv)
 {
@@ -27,7 +28,9 @@ int main(int argc, char** argv)
 
   rasterize_model(*buffer, framebuffer, zbuffer);  
 
+  std::cout << "Writing file..." << std::endl;
   framebuffer.write_tga_file("framebuffer.tga");
+  std::cout << "Done." << std::endl;
   
   return 0;
 }

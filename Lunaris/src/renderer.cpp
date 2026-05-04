@@ -1,7 +1,6 @@
 #include "../include/renderer.h"
 
 Matrix4D ModelView, Viewport, Perspective;
-std::vector<double> zbuffer;
 
 Vector4f RandomShader::vertex(int face, int vert)
 {
@@ -24,7 +23,7 @@ Vector4f RandomShader::vertex(int face, int vert)
 
 TGAColor RandomShader::fragment(const Vector3f& bar) const
 {
-  return { 255, 255, 0, 255 };  
+  return { 255, 0, 0, 255 };  
 }
 
 void draw_line(Vector3 p0, Vector3 p1, TGAImage &framebuffer, TGAColor color)
@@ -118,9 +117,6 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, std::vector<f64
         }
     }
 
-  zbuffer.resize(width * height);
-  std::fill(zbuffer.begin(), zbuffer.end(), -1e9);
-  
   for (i32 i = 0; i < buffer.face_count; i++)
     {
       Vector3 face = buffer.faces[i];
@@ -137,14 +133,15 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, std::vector<f64
           clip[d] = world;
         }
       
-      fill_triangle(width, height, clip, framebuffer, shader); 
+      fill_triangle(width, height, clip, framebuffer, shader, zbuffer); 
     }
 }
 
 
 void fill_triangle(const int width, const int height,
                    const Vector4f clip[3], TGAImage &framebuffer,
-                   const RandomShader &shader)
+                   const RandomShader &shader,
+                   std::vector<f64>& zbuffer)
 {
   Vector4f normalized_device_coordinates[3] =
   {

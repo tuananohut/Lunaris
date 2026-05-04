@@ -59,6 +59,7 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, std::vector<f64
 
 void fill_triangle(const int width, const int height,
                    const Vector4f clip[3], TGAImage &framebuffer,
-                   const RandomShader &shader);
+                   const RandomShader &shader,
+                   std::vector<f64>& zbuffer);
 
 #endif
