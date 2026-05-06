@@ -24,7 +24,11 @@ Vector4f RandomShader::vertex(int face, int vert)
 TGAColor RandomShader::fragment(const Vector3f& bar) const
 {
   Vector3f n = vec3f_normalize(cross_product(vec3f_sub(bar.c[Y], bar.c[X]),
-                                             vec3f_sub(bar.c[Z], bar.c[X])))
+                                             vec3f_sub(bar.c[Z], bar.c[X])));
+
+  // n * (n * 1) * 2 - 1;
+  
+  Vector3f r = vec3f_normalize()
   
   return { 255, 0, 0, 255 };  
 }
