@@ -23,14 +23,31 @@ Vector4f RandomShader::vertex(int face, int vert)
 
 TGAColor RandomShader::fragment(const Vector3f& bar) const
 {
+  f64 ambient_strength = 0.3;
+
+  // 0F2854 -> rgb(15, 40, 84)
+  // 1C4D8D -> rgb(28, 77, 141)
+  // 462C7D -> rgb(70, 44, 125)
+  // FF70BF -> rgb(255, 112, 191)
+  
+  Vector3f light_color = Vector3f{ 70.0/255.0, 44.0/255.0, 125.0/255.0 }; 
+  Vector3f object_color = Vector3f{ 255.0/255.0, 112.0/255.0, 191.0/255.0 };
+  
+  Vector3f ambient = vec3f_mul_scalar(light_color, ambient_strength); 
+  Vector3f result = vec3f_mul(ambient, object_color);
+  
+  /*
   Vector3f n = vec3f_normalize(cross_product(vec3f_sub(bar.c[Y], bar.c[X]),
                                              vec3f_sub(bar.c[Z], bar.c[X])));
+  */
 
-  // n * (n * 1) * 2 - 1;
-  
-  Vector3f r = vec3f_normalize()
-  
-  return { 255, 0, 0, 255 };  
+  return
+    {
+      static_cast<uint8_t>(result.c[X] * 255.0),
+      static_cast<uint8_t>(result.c[Y] * 255.0),
+      static_cast<uint8_t>(result.c[Z] * 255.0),
+      255
+    }; 
 }
 
 void draw_line(Vector3 p0, Vector3 p1, TGAImage &framebuffer, TGAColor color)
@@ -114,13 +131,11 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, std::vector<f64
 
   Vector4f clip[3];
 
-  TGAColor clean = {0, 0, 0, 255};
-
   for (int y = 0; y < framebuffer.height(); y++)
     {
       for (int x = 0; x < framebuffer.width(); x++)
         {
-          framebuffer.set(x, y, clean);
+          framebuffer.set(x, y, navy);
         }
     }
 
