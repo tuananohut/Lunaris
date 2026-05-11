@@ -48,6 +48,9 @@ TGAColor RandomShader::fragment(const Vector3f& bar) const
   Vector3f r_2 = vec3f_mul_scalar(r, 2);
   r_2 = vec3f_sub(r_2, light_dir);
 
+  f64 diff = std::max(0., vec3f_dot(n, light_dir));
+  double specular_power = std::pow(std::max(r.c[Z], 0.), 35);
+  
   return
     {
       static_cast<uint8_t>(r_2.c[X] * 255.0),
