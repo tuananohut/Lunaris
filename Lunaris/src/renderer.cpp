@@ -50,14 +50,13 @@ TGAColor RandomShader::fragment(const Vector3f& bar) const
 
   f64 diff = std::max(0., vec3f_dot(n, light_dir));
   double specular_power = std::pow(std::max(r.c[Z], 0.), 35);
+
+  TGAColor gl_FragColor = {255, 255, 255, 255}; 
   
-  return
-    {
-      static_cast<uint8_t>(r_2.c[X] * 255.0),
-      static_cast<uint8_t>(r_2.c[Y] * 255.0),
-      static_cast<uint8_t>(r_2.c[Z] * 255.0),
-      255
-    }; 
+  for (int channel : {0,1,2})
+    gl_FragColor[channel] *= std::min(1., vec3f_add(vec3f_add(ambient, vec3fs(diff*.4)), vec3fs(specular_power * .9)));
+  
+  return gl_FragColor;
 }
 
 void draw_line(Vector3 p0, Vector3 p1, TGAImage &framebuffer, TGAColor color)
