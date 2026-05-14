@@ -52,10 +52,19 @@ TGAColor RandomShader::fragment(const Vector3f& bar) const
   double specular_power = std::pow(std::max(r.c[Z], 0.), 35);
 
   TGAColor gl_FragColor = {255, 255, 255, 255}; 
-  
-  for (int channel : {0,1,2})
-    gl_FragColor[channel] = vec3f_mul_scalar(vec3f_add(vec3f_add(ambient, vec3fs(diff*.4)), vec3fs(specular_power * .9)), gl_FragColor);
-  
+
+  Vector3f lighting = vec3f_add(
+      vec3f_add(ambient, vec3fs(diff * 0.4)), 
+      vec3fs(specular_power * 0.9)
+  );
+
+  for (int channel : {0, 1, 2}) 
+  {
+      double color_val = gl_FragColor[channel] * lighting.c[channel];
+      
+      gl_FragColor[channel] = static_cast<uint8_t>(std::max(0.0, std::min(255.0, color_val)));
+  }
+    
   return gl_FragColor;
 }
 
