@@ -21,51 +21,49 @@ Vector4f RandomShader::vertex(int face, int vert)
   return mul_vec4f(Perspective, view);
 }
 
-
 TGAColor RandomShader::fragment(const Vector3f& bar) const
 {
-  f64 ambient_strength = 0.3;
-
-  // 0F2854 -> rgb(15, 40, 84)
-  // 1C4D8D -> rgb(28, 77, 141)
-  // 462C7D -> rgb(70, 44, 125)
-  // FF70BF -> rgb(255, 112, 191)
-  
-  Vector3f light_color = Vector3f{ 70.0/255.0, 44.0/255.0, 125.0/255.0 }; 
-  Vector3f object_color = Vector3f{ 255.0/255.0, 112.0/255.0, 191.0/255.0 };
-  
-  Vector3f ambient = vec3f_mul_scalar(light_color, ambient_strength); 
-  Vector3f result = vec3f_mul(ambient, object_color);
-  
+  // Triangle normal
   Vector3f n = vec3f_normalize(cross_product(vec3f_sub(tri[1], tri[0]),
                                              vec3f_sub(tri[2], tri[0])));
 
-  Vector3f light_dir = vec3f_normalize(Vector3f{ 10.0, 0.0, -1.0 });
+  // Light direction
+  Vector3f light_dir = vec3f_normalize(Vector3f{10.0, 0.0, -1.0});
 
-  
-  Vector3f l = vec3f_mul(n, light_dir);
-  Vector3f r = vec3f_mul(n, l);
-  Vector3f r_2 = vec3f_mul_scalar(r, 2);
-  r_2 = vec3f_sub(r_2, light_dir);
+  // View direction (camera looking toward -Z)
+  Vector3f view_dir = vec3f_normalize(Vector3f{0.0, 0.0, 1.0});
 
-  f64 diff = std::max(0., vec3f_dot(n, light_dir));
-  double specular_power = std::pow(std::max(r.c[Z], 0.), 35);
+  // Ambient
+  double ambient_strength = 0.3;
+  double ambient = ambient_strength;
 
-  TGAColor gl_FragColor = {255, 255, 255, 255}; 
+  // Diffuse
+  double diff = std::max(0.0, vec3f_dot(n, light_dir));
 
-  Vector3f lighting = vec3f_add(
-      vec3f_add(ambient, vec3fs(diff * 0.4)), 
-      vec3fs(specular_power * 0.9)
-  );
+  // Reflection vector
+  Vector3f reflect_dir = vec3f_sub(vec3f_mul_scalar(n, 2.0 * vec3f_dot(n, light_dir)), light_dir);
 
-  for (int channel : {0, 1, 2}) 
-  {
-      double color_val = gl_FragColor[channel] * lighting.c[channel];
-      
-      gl_FragColor[channel] = static_cast<uint8_t>(std::max(0.0, std::min(255.0, color_val)));
-  }
-    
-  return gl_FragColor;
+  reflect_dir = vec3f_normalize(reflect_dir);
+
+  // Specular
+  double spec = std::pow(std::max(vec3f_dot(view_dir, reflect_dir), 0.0), 32.0);
+
+  // Final intensity
+  double intensity = ambient + diff * 0.6 + spec * 0.8;
+
+  intensity = std::min(1.0, intensity);
+
+  // Object color
+  Vector3f object_color = { 255.0, 112.0, 191.0 };
+
+  TGAColor out;
+
+  out[0] = static_cast<uint8_t>(object_color.c[0] * intensity);
+  out[1] = static_cast<uint8_t>(object_color.c[1] * intensity);
+  out[2] = static_cast<uint8_t>(object_color.c[2] * intensity);
+  out[3] = 255;
+
+  return out;
 }
 
 void draw_line(Vector3 p0, Vector3 p1, TGAImage &framebuffer, TGAColor color)
