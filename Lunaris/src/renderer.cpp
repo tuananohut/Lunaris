@@ -51,8 +51,8 @@ TGAColor RandomShader::fragment(const Vector3f& bar) const
   // Final intensity
   double intensity = ambient + diff * 0.6 + spec * 0.8;
 
-  intensity = std::min(1.0, intensity);
-
+  intensity = floor(intensity * 4.0) / 4.0;
+  
   // Object color
   Vector3f object_color = { 255.0, 112.0, 191.0 };
 
