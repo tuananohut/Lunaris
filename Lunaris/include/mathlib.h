@@ -62,7 +62,6 @@ Vector3f vec3f_div(Vector3f a, Vector3f b);
 Vector3f vec3f_div_scalar(Vector3f a, f64 s);
 Vector3f vec3f_normalize(const Vector3f a);
 Vector3f mul_vec3f(Matrix3D m, Vector3f v);
-Vector3f vec3f_crossproduct(const Vector3f& a, const Vector3f& b); 
 Vector3f perspective(Vector3f v);
 Vector3f cross_product(Vector3f a, Vector3f b);
 f64 vec3f_dot(Vector3f a, Vector3f b);

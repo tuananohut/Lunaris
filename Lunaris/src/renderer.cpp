@@ -23,44 +23,47 @@ Vector4f RandomShader::vertex(int face, int vert)
 
 TGAColor RandomShader::fragment(const Vector3f& bar) const
 {
-  // Triangle normal
-  Vector3f n = vec3f_normalize(cross_product(vec3f_sub(tri[1], tri[0]),
-                                             vec3f_sub(tri[2], tri[0])));
+  Vector3f n = vec3f_normalize(cross_product(vec3f_sub(tri[1], tri[0]), vec3f_sub(tri[2], tri[0])));
 
-  // Light direction
-  Vector3f light_dir = vec3f_normalize(Vector3f{10.0, 0.0, -1.0});
+  Vector3f light_dir = vec3f_normalize(Vector3f{ 1.0, 1.0, -1.0 });
 
-  // View direction (camera looking toward -Z)
-  Vector3f view_dir = vec3f_normalize(Vector3f{0.0, 0.0, 1.0});
+  f64 diff = std::max(0.0, vec3f_dot(n, light_dir));
 
-  // Ambient
-  double ambient_strength = 0.3;
-  double ambient = ambient_strength;
+  f64 ambient = 0.25;
 
-  // Diffuse
-  double diff = std::max(0.0, vec3f_dot(n, light_dir));
+  f64 intensity = ambient + diff * 0.75;
 
-  // Reflection vector
-  Vector3f reflect_dir = vec3f_sub(vec3f_mul_scalar(n, 2.0 * vec3f_dot(n, light_dir)), light_dir);
-
-  reflect_dir = vec3f_normalize(reflect_dir);
-
-  // Specular
-  double spec = std::pow(std::max(vec3f_dot(view_dir, reflect_dir), 0.0), 32.0);
-
-  // Final intensity
-  double intensity = ambient + diff * 0.6 + spec * 0.8;
-
-  intensity = floor(intensity * 4.0) / 4.0;
-  
-  // Object color
-  Vector3f object_color = { 255.0, 112.0, 191.0 };
+  if (intensity > 0.75)
+    intensity = 1.0;
+  else if (intensity > 0.5)
+    intensity = 0.7;
+  else if (intensity > 0.25)
+    intensity = 0.4;
+  else
+    intensity = 0.2;
 
   TGAColor out;
+    
+  f32 edge = 0.02;
 
-  out[0] = static_cast<uint8_t>(object_color.c[0] * intensity);
-  out[1] = static_cast<uint8_t>(object_color.c[1] * intensity);
-  out[2] = static_cast<uint8_t>(object_color.c[2] * intensity);
+  if (bar.c[X] < edge || bar.c[Y] < edge || bar.c[Z] < edge)
+    {
+      out[0] = 0; 
+      out[1] = 0;
+      out[2] = 0;
+      out[3] = 255; 
+    }
+
+  Vector3f base_color =
+    {
+      255.0,
+      112.0,
+      191.0
+    };
+
+  out[0] = static_cast<uint8_t>(base_color.c[0] * intensity);
+  out[1] = static_cast<uint8_t>(base_color.c[1] * intensity);
+  out[2] = static_cast<uint8_t>(base_color.c[2] * intensity);
   out[3] = 255;
 
   return out;
@@ -106,24 +109,24 @@ void draw_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
 }
 
 /*
-void render_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAColor color)
-{ 
+  void render_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAColor color)
+  { 
   for (i32 i = 0; i < buffer.face_count; i++)
-    {
-      Vector3 face = buffer.faces[i];
+  {
+  Vector3 face = buffer.faces[i];
 
-      Vector3 vertex0_ = screen(buffer.vertices[face.c[X]]);   
-      Vector3 vertex1_ = screen(buffer.vertices[face.c[Y]]);   
-      Vector3 vertex2_ = screen(buffer.vertices[face.c[Z]]);   
+  Vector3 vertex0_ = screen(buffer.vertices[face.c[X]]);   
+  Vector3 vertex1_ = screen(buffer.vertices[face.c[Y]]);   
+  Vector3 vertex2_ = screen(buffer.vertices[face.c[Z]]);   
 
-      draw_triangle(vertex0_, vertex1_, vertex2_, framebuffer, color); 
-    }
-}
+  draw_triangle(vertex0_, vertex1_, vertex2_, framebuffer, color); 
+  }
+  }
 */
 
 void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, std::vector<f64> &zbuffer)
 {
-  constexpr Vector3f    eye = {  0.0, 1.0, 2.0 };
+  constexpr Vector3f    eye = {  0.0, 0.0, 2.0 };
   constexpr Vector3f center = {  0.0, 0.0, 0.0 };
   constexpr Vector3f     up = {  0.0, 1.0, 0.0 };
 
@@ -182,11 +185,11 @@ void fill_triangle(const int width, const int height,
                    std::vector<f64>& zbuffer)
 {
   Vector4f normalized_device_coordinates[3] =
-  {
-    vec4f_div_scalar(clip[0], clip[0].c[W]),
-    vec4f_div_scalar(clip[1], clip[1].c[W]),
-    vec4f_div_scalar(clip[2], clip[2].c[W]),   
-  };
+    {
+      vec4f_div_scalar(clip[0], clip[0].c[W]),
+      vec4f_div_scalar(clip[1], clip[1].c[W]),
+      vec4f_div_scalar(clip[2], clip[2].c[W]),   
+    };
     
   Vector2 screen[3] = {0}; 
   
@@ -233,8 +236,8 @@ void fill_triangle(const int width, const int height,
             continue;
 
           f64 z = alpha * normalized_device_coordinates[0].c[Z] + 
-                  beta  * normalized_device_coordinates[1].c[Z] + 
-                  gamma * normalized_device_coordinates[2].c[Z]; 
+            beta  * normalized_device_coordinates[1].c[Z] + 
+            gamma * normalized_device_coordinates[2].c[Z]; 
     
           if (z <= zbuffer[x + y * framebuffer.width()])
             continue;
