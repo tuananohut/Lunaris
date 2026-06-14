@@ -44,6 +44,23 @@ In other words, the project acts as a software-based camera and renderer for 3D 
   </tr>
 </table>
 
+### Shading
+
+<table>
+  <tr>
+    <td><img src="images/african_head_shading.png" alt="African Head" width="250"/></td>
+    <td><img src="images/bunny_shading.png" alt="Bunny" width="250"/></td>
+    <td><img src="images/penger_shading.png" alt="Penger" width="250"/></td>
+    <td><img src="images/teapot_shading.png" alt="Teapot" width="250"/></td>
+  </tr>
+  <tr>
+    <td align="center">African Head</td>
+    <td align="center">Bunny</td>
+    <td align="center">Penger</td>
+    <td align="center">Teapot</td>
+  </tr>
+</table>
+
 ---
 
 ## Features
@@ -57,7 +74,8 @@ This project is currently a work in progress.
 - Triangle rasterization
 - Backface culling
 - Custom math library
-- Camera 
+- Camera
+- Vertex and Fragment shader functions based on CPU
 
 ---
 

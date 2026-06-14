@@ -23,49 +23,30 @@ Vector4f RandomShader::vertex(int face, int vert)
 
 TGAColor RandomShader::fragment(const Vector3f& bar) const
 {
-  Vector3f n = vec3f_normalize(cross_product(vec3f_sub(tri[1], tri[0]), vec3f_sub(tri[2], tri[0])));
-
+  Vector3f n = vec3f_normalize(cross_product(vec3f_sub(tri[1], tri[0]),
+                                             vec3f_sub(tri[2], tri[0])));
+  
   Vector3f light_dir = vec3f_normalize(Vector3f{ 1.0, 1.0, -1.0 });
 
-  f64 diff = std::max(0.0, vec3f_dot(n, light_dir));
+  Vector3f centroid = vec3f_mul_scalar(vec3f_add(vec3f_add(tri[0], tri[1]), tri[2]), 1.0 / 3.0);
+  Vector3f v = vec3f_normalize(vec3f_mul_scalar(centroid, -1.0));
 
-  f64 ambient = 0.25;
+  f64 e = 32.0;  
 
-  f64 intensity = ambient + diff * 0.75;
+  Vector3f r = vec3f_sub(vec3f_mul_scalar(n, 2.0 * vec3f_dot(n, light_dir)), light_dir); 
+  f64 spec   = std::pow(std::max(0.0, vec3f_dot(r, v)), e);
+  f64 diff   = std::abs(vec3f_dot(n, light_dir));
+  f64 ambient = 0.4;
+  f64 intensity = std::min(1.0, ambient + 0.6 * diff + 0.4 * spec);
 
-  if (intensity > 0.75)
-    intensity = 1.0;
-  else if (intensity > 0.5)
-    intensity = 0.7;
-  else if (intensity > 0.25)
-    intensity = 0.4;
-  else
-    intensity = 0.2;
+  // Vector3f base_color = { 255.0, 112.0, 191.0 };
+  Vector3f base_color = { 245.0, 245.0, 245.0 };
 
   TGAColor out;
-    
-  f32 edge = 0.02;
-
-  if (bar.c[X] < edge || bar.c[Y] < edge || bar.c[Z] < edge)
-    {
-      out[0] = 0; 
-      out[1] = 0;
-      out[2] = 0;
-      out[3] = 255; 
-    }
-
-  Vector3f base_color =
-    {
-      255.0,
-      112.0,
-      191.0
-    };
-
   out[0] = static_cast<uint8_t>(base_color.c[0] * intensity);
   out[1] = static_cast<uint8_t>(base_color.c[1] * intensity);
   out[2] = static_cast<uint8_t>(base_color.c[2] * intensity);
   out[3] = 255;
-
   return out;
 }
 
@@ -108,22 +89,6 @@ void draw_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
   draw_line(point1, point3, framebuffer, color);
 }
 
-/*
-  void render_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAColor color)
-  { 
-  for (i32 i = 0; i < buffer.face_count; i++)
-  {
-  Vector3 face = buffer.faces[i];
-
-  Vector3 vertex0_ = screen(buffer.vertices[face.c[X]]);   
-  Vector3 vertex1_ = screen(buffer.vertices[face.c[Y]]);   
-  Vector3 vertex2_ = screen(buffer.vertices[face.c[Z]]);   
-
-  draw_triangle(vertex0_, vertex1_, vertex2_, framebuffer, color); 
-  }
-  }
-*/
-
 void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, std::vector<f64> &zbuffer)
 {
   constexpr Vector3f    eye = {  0.0, 0.0, 2.0 };
@@ -160,21 +125,12 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, std::vector<f64
 
   for (i32 i = 0; i < buffer.face_count; i++)
     {
-      Vector3 face = buffer.faces[i];
-      RandomShader shader(buffer); 
-      
+      RandomShader shader(buffer);
+	  
       for (i32 d = 0; d < 3; d++)
-        {
-          Vector3f vertex = buffer.vertices[buffer.faces[i].c[d]];
-          Vector4f model = { vertex.c[X], vertex.c[Y], vertex.c[Z], 1.0 };
-
-          Vector4f view  = mul_vec4f(ModelView, model);
-          Vector4f world = mul_vec4f(Perspective, view);
-
-          clip[d] = world;
-        }
-      
-      fill_triangle(width, height, clip, framebuffer, shader, zbuffer); 
+	clip[d] = shader.vertex(i, d);   
+	  
+      fill_triangle(width, height, clip, framebuffer, shader, zbuffer);
     }
 }
 

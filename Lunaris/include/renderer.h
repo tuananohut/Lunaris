@@ -41,7 +41,7 @@ struct RandomShader
 {
   const ModelBuffer& model;
   TGAColor color = {};
-  Vector3f tri[3];
+  Vector3f tri[3] = {};
 
   RandomShader(const ModelBuffer& m) : model(m) {}
 
