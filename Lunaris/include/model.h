@@ -9,10 +9,12 @@
 struct ModelBuffer
 {
   Vector3f vertices[10000];
+  Vector3f normals[30000];
   Vector3 faces[30000];
 
   i32 vertex_count;
-  i32 face_count; 
+  i32 normal_count; 
+  i32 face_count;
 };
 
 bool object_to_render(const char *filename, ModelBuffer &buffer);

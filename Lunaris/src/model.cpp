@@ -9,6 +9,7 @@ bool object_to_render(const char *filename, ModelBuffer &buffer)
     return false;
   
   i32 posCount = 0;
+  i32 normalCount = 0; 
   i32 faceCount = 0;
   
   char line[40000];
@@ -27,11 +28,18 @@ bool object_to_render(const char *filename, ModelBuffer &buffer)
           sscanf(line, "f %d%*[^ ] %d%*[^ ] %d%*[^ ]", &v0, &v1, &v2);
           buffer.faces[faceCount++] = vec3(v0 - 1, v1 - 1, v2 - 1);
         }
+      if (line[0] == 'v' && line[1] == 'n' && line[2] == ' ')
+        {
+          f64 nx, ny, nz;
+          i32 read = sscanf(line, "vn %lf %lf %lf", &nx, &ny, &nz);
+          buffer.vertices[normalCount++] = vec3f(nx, ny, nz);
+        } 
     }
 
   fclose(file);
 
   buffer.vertex_count = posCount;
+  buffer.normal_count = normalCount;  
   buffer.face_count   = faceCount;
   
   return true;

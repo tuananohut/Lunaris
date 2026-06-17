@@ -45,7 +45,7 @@ struct RandomShader
 
   RandomShader(const ModelBuffer& m) : model(m) {}
 
-  Vector4f vertex(int face, int vert);
+  Vector4f vertex(int face, int vert, int norm);
 
   TGAColor fragment(const Vector3f& bar) const;
 };

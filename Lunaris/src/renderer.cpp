@@ -2,10 +2,11 @@
 
 Matrix4D ModelView, Viewport, Perspective;
 
-Vector4f RandomShader::vertex(int face, int vert)
+Vector4f RandomShader::vertex(int face, int vert, int norm)
 {
   Vector3f v = model.vertices[model.faces[face].c[vert]];
-
+  Vector3f vn = model.vertices[model.faces[face].c[norm]];
+  
   Vector4f model_pos =
     {
       v.c[X],
@@ -128,7 +129,7 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, std::vector<f64
       RandomShader shader(buffer);
 	  
       for (i32 d = 0; d < 3; d++)
-	clip[d] = shader.vertex(i, d);   
+	clip[d] = shader.vertex(i, d, d);   
 	  
       fill_triangle(width, height, clip, framebuffer, shader, zbuffer);
     }
