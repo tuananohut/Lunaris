@@ -22,18 +22,20 @@ bool object_to_render(const char *filename, ModelBuffer &buffer)
           i32 read = sscanf(line, "v %lf %lf %lf", &x, &y, &z);
           buffer.vertices[posCount++] = vec3f(x, y, z);
         }
+      
+      if (line[0] == 'v' && line[1] == 'n' && line[2] == ' ')
+        {
+          f64 nx, ny, nz;
+          i32 read = sscanf(line, "vn %lf %lf %lf", &nx, &ny, &nz);
+          buffer.normals[normalCount++] = vec3f(nx, ny, nz);
+        }
+      
       if (line[0] == 'f' && line[1] == ' ')
         {
           i32 v0, v1, v2; 
           sscanf(line, "f %d%*[^ ] %d%*[^ ] %d%*[^ ]", &v0, &v1, &v2);
           buffer.faces[faceCount++] = vec3(v0 - 1, v1 - 1, v2 - 1);
         }
-      if (line[0] == 'v' && line[1] == 'n' && line[2] == ' ')
-        {
-          f64 nx, ny, nz;
-          i32 read = sscanf(line, "vn %lf %lf %lf", &nx, &ny, &nz);
-          buffer.vertices[normalCount++] = vec3f(nx, ny, nz);
-        } 
     }
 
   fclose(file);

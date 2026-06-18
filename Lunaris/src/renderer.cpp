@@ -5,7 +5,7 @@ Matrix4D ModelView, Viewport, Perspective;
 Vector4f RandomShader::vertex(int face, int vert, int norm)
 {
   Vector3f v = model.vertices[model.faces[face].c[vert]];
-  Vector3f vn = model.vertices[model.faces[face].c[norm]];
+  Vector3f vn = model.normals[model.faces[face].c[norm]];
   
   Vector4f model_pos =
     {
@@ -15,11 +15,26 @@ Vector4f RandomShader::vertex(int face, int vert, int norm)
       1.0
     };
 
+  Vector4f normal_pos =
+    {
+      vn.c[X],
+      vn.c[Y],
+      vn.c[Z],
+      1.0
+    };
+  
   Vector4f view = mul_vec4f(ModelView, model_pos);
 
+  Vector4f view_normal = mul_vec4f(ModelView, normal_pos); 
+  
   tri[vert] = { view.c[X], view.c[Y], view.c[Z] };
 
-  return mul_vec4f(Perspective, view);
+  // tri[norm] = { view_normal.c[X], view_normal.c[Y], view_normal.c[Z] }; 
+
+  Vector4f perspective = mul_vec4f(Perspective, view);
+  // perspective = mul_vec4f(Perspective, view_normal);
+  
+  return perspective;
 }
 
 TGAColor RandomShader::fragment(const Vector3f& bar) const
