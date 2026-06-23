@@ -108,6 +108,7 @@ Matrix3D matrix3d_rotation_y(f64 t);
 Matrix3D matrix3d_rotation_z(f64 t);
 Matrix3D matrix3d_multiply(const Matrix3D a, const Matrix3D b); 
 Matrix3D matrix3d_transpose(const Matrix3D a);
+Matrix3D matrix3d_inverse(Matrix3D a);
 
 ///////////////////////////////////////////////////////////
 
@@ -123,6 +124,7 @@ Matrix4D matrix4d_multiply(const Matrix4D a, const Matrix4D b);
 Matrix4D matrix4d_translation(const Vector4 v); 
 Matrix4D matrix4d_scale(const Vector4 v);
 Matrix4D matrix4d_transpose(const Matrix4D a); 
+Matrix4D matrix4d_inverse(Matrix4D a);
 
 #endif
 

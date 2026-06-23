@@ -7,7 +7,7 @@ Vector4f RandomShader::vertex(int face, int vert, int norm)
   Vector3f v = model.vertices[model.faces[face].c[vert]];
   Vector3f vn = model.normals[model.faces[face].c[norm]];
 
-  Matrix4D normal_matrix = matrix4d_transpose(ModelView); 
+  Matrix4D normal_matrix = matrix4d_transpose(matrix4d_inverse(ModelView));
   
   Vector4f model_pos =
     {
@@ -17,17 +17,16 @@ Vector4f RandomShader::vertex(int face, int vert, int norm)
       1.0
     };
 
-  Vector4f normal_pos =
+  Vector4f model_normal =
     {
       vn.c[X],
       vn.c[Y],
       vn.c[Z],
-      1.0
+      0.0
     };
   
   Vector4f view = mul_vec4f(ModelView, model_pos);
-
-  Vector4f view_normal = mul_vec4f(normal_matrix, normal_pos); 
+  Vector4f view_normal = mul_vec4f(normal_matrix, model_normal); 
   
   tri[vert] = { view.c[X], view.c[Y], view.c[Z] };
 
