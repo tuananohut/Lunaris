@@ -21,8 +21,8 @@ int main(int argc, char** argv)
   // const char *model_filename = "../obj/african_head/african_head.obj";
   // const char *model_filename = "../obj/diablo3_pose/diablo3_pose.obj";
   // const char *model_filename = "../obj/bunny.obj";
-  // const char *model_filename = "../obj/penger.obj";
-  const char *model_filename = "../obj/teapot.obj";
+  const char *model_filename = "../obj/penger.obj";
+  // const char *model_filename = "../obj/teapot.obj";
 
   object_to_render(model_filename, *buffer);
 

@@ -2,13 +2,9 @@
 
 Matrix4D ModelView, Viewport, Perspective;
 
-Vector4f RandomShader::vertex(int face, int vert, int norm)
+Vector4f RandomShader::vertex(int face, int vert)
 {
-  Vector3f v = model.vertices[model.faces[face].c[vert]];
-  Vector3f vn = model.normals[model.faces[face].c[norm]];
-
-  Matrix4D normal_matrix = matrix4d_transpose(matrix4d_inverse(ModelView));
-  
+  Vector3f v = model.vertices[model.faces[face].c[vert]];  
   Vector4f model_pos =
     {
       v.c[X],
@@ -17,20 +13,22 @@ Vector4f RandomShader::vertex(int face, int vert, int norm)
       1.0
     };
 
-  Vector4f model_normal =
+  // Vector3f n = model.normals[model.faces[face].c[vert]];
+  Vector3f n = model.normals[model.normal_faces[face].c[vert]];
+  Vector4f normal =
     {
-      vn.c[X],
-      vn.c[Y],
-      vn.c[Z],
+      n.c[X],
+      n.c[Y],
+      n.c[Z],
       0.0
     };
-  
+  Matrix4D normal_matrix = matrix4d_transpose(matrix4d_inverse(ModelView));
+
   Vector4f view = mul_vec4f(ModelView, model_pos);
-  Vector4f view_normal = mul_vec4f(normal_matrix, model_normal); 
+  Vector4f view_normal = mul_vec4f(normal_matrix, normal); 
   
   tri[vert] = { view.c[X], view.c[Y], view.c[Z] };
-
-  tri[norm] = { view_normal.c[X], view_normal.c[Y], view_normal.c[Z] }; 
+  normals[vert] = { view_normal.c[X], view_normal.c[Y], view_normal.c[Z] };
 
   Vector4f perspective = mul_vec4f(Perspective, view);
   // perspective = mul_vec4f(Perspective, view_normal);
@@ -40,7 +38,9 @@ Vector4f RandomShader::vertex(int face, int vert, int norm)
 
 TGAColor RandomShader::fragment(const Vector3f& bar) const
 {
-  Vector3f n = vec3f_normalize(tri[X]);
+  Vector3f n = vec3f_normalize(vec3f_add(vec3f_add(vec3f_mul_scalar(normals[0], bar.c[X]),
+						   vec3f_mul_scalar(normals[1], bar.c[Y])),
+					 vec3f_mul_scalar(normals[2], bar.c[Z])));
   
   Vector3f light_dir = vec3f_normalize(Vector3f{ 1.0, 1.0, -1.0 });
 
@@ -51,7 +51,7 @@ TGAColor RandomShader::fragment(const Vector3f& bar) const
 
   Vector3f r = vec3f_sub(vec3f_mul_scalar(n, 2.0 * vec3f_dot(n, light_dir)), light_dir); 
   f64 spec   = std::pow(std::max(0.0, vec3f_dot(r, v)), e);
-  f64 diff   = std::abs(vec3f_dot(n, light_dir));
+  f64 diff   = std::max(0.0, vec3f_dot(n, light_dir));
   f64 ambient = 0.4;
   f64 intensity = std::min(1.0, ambient + 0.6 * diff + 0.4 * spec);
 
@@ -144,7 +144,7 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, std::vector<f64
       RandomShader shader(buffer);
 	  
       for (i32 d = 0; d < 3; d++)
-	clip[d] = shader.vertex(i, d, d);   
+	clip[d] = shader.vertex(i, d);   
 	  
       fill_triangle(width, height, clip, framebuffer, shader, zbuffer);
     }

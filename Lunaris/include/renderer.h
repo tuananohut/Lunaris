@@ -42,10 +42,11 @@ struct RandomShader
   const ModelBuffer& model;
   TGAColor color = {};
   Vector3f tri[3] = {};
+  Vector3f normals[3] = {};
 
   RandomShader(const ModelBuffer& m) : model(m) {}
 
-  Vector4f vertex(int face, int vert, int norm);
+  Vector4f vertex(int face, int vert);
 
   TGAColor fragment(const Vector3f& bar) const;
 };
