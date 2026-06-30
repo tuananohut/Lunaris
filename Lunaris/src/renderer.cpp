@@ -13,7 +13,6 @@ Vector4f RandomShader::vertex(int face, int vert)
       1.0
     };
 
-  // Vector3f n = model.normals[model.faces[face].c[vert]];
   Vector3f n = model.normals[model.normal_faces[face].c[vert]];
   Vector4f normal =
     {
@@ -31,7 +30,6 @@ Vector4f RandomShader::vertex(int face, int vert)
   normals[vert] = { view_normal.c[X], view_normal.c[Y], view_normal.c[Z] };
 
   Vector4f perspective = mul_vec4f(Perspective, view);
-  // perspective = mul_vec4f(Perspective, view_normal);
   
   return perspective;
 }
@@ -44,8 +42,10 @@ TGAColor RandomShader::fragment(const Vector3f& bar) const
   
   Vector3f light_dir = vec3f_normalize(Vector3f{ 1.0, 1.0, -1.0 });
 
-  Vector3f centroid = vec3f_mul_scalar(vec3f_add(vec3f_add(tri[0], tri[1]), tri[2]), 1.0 / 3.0);
-  Vector3f v = vec3f_normalize(vec3f_mul_scalar(centroid, -1.0));
+  Vector3f frag_pos = vec3f_add(vec3f_add(vec3f_mul_scalar(tri[0], bar.c[X]),
+					  vec3f_mul_scalar(tri[1], bar.c[Y])),
+				vec3f_mul_scalar(tri[2], bar.c[Z]));
+  Vector3f v = vec3f_normalize(vec3f_mul_scalar(frag_pos, -1.0));
 
   f64 e = 32.0;  
 
@@ -56,7 +56,7 @@ TGAColor RandomShader::fragment(const Vector3f& bar) const
   f64 intensity = std::min(1.0, ambient + 0.6 * diff + 0.4 * spec);
 
   // Vector3f base_color = { 255.0, 112.0, 191.0 };
-  Vector3f base_color = { 245.0, 245.0, 245.0 };
+  Vector3f base_color = { 250.0, 250.0, 250.0 };
 
   TGAColor out;
   out[0] = static_cast<uint8_t>(base_color.c[0] * intensity);

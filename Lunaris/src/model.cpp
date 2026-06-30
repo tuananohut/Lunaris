@@ -12,9 +12,9 @@ static int parse_face_token(const char* tok, i32* v, i32* vt, i32* vn)
 
 static inline i32 resolve_index(i32 idx, i32 count)
 {
-    if (idx > 0) return idx - 1;
-    if (idx < 0) return count + idx;
-    return -1;
+  if (idx > 0) return idx - 1;
+  if (idx < 0) return count + idx;
+  return -1;
 }
 
 bool object_to_render(const char *filename, ModelBuffer &buffer)
@@ -46,30 +46,6 @@ bool object_to_render(const char *filename, ModelBuffer &buffer)
           i32 read = sscanf(line, "vn %lf %lf %lf", &nx, &ny, &nz);
           buffer.normals[normalCount++] = vec3f(nx, ny, nz);
         }
-
-      /*
-      if (line[0] == 'f' && line[1] == ' ')
-        {
-          i32 v0, v1, v2; 
-          sscanf(line, "f %d%*[^ ] %d%*[^ ] %d%*[^ ]", &v0, &v1, &v2);
-          buffer.faces[faceCount++] = vec3(v0 - 1, v1 - 1, v2 - 1);
-        }
-      */
-      /*
-      if (line[0] == 'f' && line[1] == ' ')
-	{
-	  i32 v[3], n[3];
-	  int got = sscanf(line, "f %d/%*d/%d %d/%*d/%d %d/%*d/%d",
-			   &v[0],&n[0], &v[1],&n[1], &v[2],&n[2]);
-	  if (got != 6) 
-	    got = sscanf(line, "f %d//%d %d//%d %d//%d",
-			 &v[0],&n[0], &v[1],&n[1], &v[2],&n[2]);
-
-	  buffer.faces[faceCount]        = vec3(v[0]-1, v[1]-1, v[2]-1);
-	  buffer.normal_faces[faceCount] = vec3(n[0]-1, n[1]-1, n[2]-1);
-	  faceCount++;
-	}
-      */
 
       if (line[0] == 'f' && line[1] == ' ')
 	{

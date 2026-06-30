@@ -61,6 +61,23 @@ In other words, the project acts as a software-based camera and renderer for 3D 
   </tr>
 </table>
 
+### Smooth Shading
+
+<table>
+  <tr>
+    <td><img src="images/african_head_smooth_shading.png" alt="African Head" width="250"/></td>
+    <td><img src="images/bunny_smooth_shading.png" alt="Bunny" width="250"/></td>
+    <td><img src="images/penger_smooth_shading.png" alt="Penger" width="250"/></td>
+    <td><img src="images/teapot_smooth_shading.png" alt="Teapot" width="250"/></td>
+  </tr>
+  <tr>
+    <td align="center">African Head</td>
+    <td align="center">Bunny</td>
+    <td align="center">Penger</td>
+    <td align="center">Teapot</td>
+  </tr>
+</table>
+
 ---
 
 ## Features
