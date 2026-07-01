@@ -204,6 +204,13 @@ void fill_triangle(const int width, const int height,
           f64 beta  = signed_area(screen[2], screen[0], p) / total_area;
           f64 gamma = signed_area(screen[0], screen[1], p) / total_area;
 
+	  f64 a = alpha / clip[0].c[W];
+	  f64 b = beta  / clip[1].c[W];
+	  f64 g = gamma / clip[2].c[W];
+
+	  f64 sum = a + b + g;
+	  Vector3f bar_persp = { a/sum, b/sum, g/sum };  
+
           if (alpha < 0 || beta < 0 || gamma < 0)
             continue;
 

@@ -28,6 +28,7 @@ bool object_to_render(const char *filename, ModelBuffer &buffer)
   i32 posCount = 0;
   i32 normalCount = 0; 
   i32 faceCount = 0;
+  i32 texCount = 0;
   
   char line[40000];
 
@@ -45,6 +46,13 @@ bool object_to_render(const char *filename, ModelBuffer &buffer)
           f64 nx, ny, nz;
           i32 read = sscanf(line, "vn %lf %lf %lf", &nx, &ny, &nz);
           buffer.normals[normalCount++] = vec3f(nx, ny, nz);
+        }
+
+      if (line[1] == 't' && line[2] == ' ')
+        {
+          i32 tx, ty;
+          i32 read = sscanf(line, "vt %d %d", &tx, &ty);
+          buffer.tex_faces[texCount++] = vec2(tx, ty);
         }
 
       if (line[0] == 'f' && line[1] == ' ')
