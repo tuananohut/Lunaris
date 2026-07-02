@@ -221,9 +221,7 @@ void fill_triangle(const int width, const int height,
           if (z <= zbuffer[x + y * framebuffer.width()])
             continue;
 
-          Vector3f bar = { alpha, beta, gamma };
-
-          TGAColor color = shader.fragment(bar); 
+          TGAColor color = shader.fragment(bar_persp); 
           
           zbuffer[x + y * framebuffer.width()] = z;
           framebuffer.set(x, y, color);

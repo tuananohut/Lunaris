@@ -48,16 +48,9 @@ bool object_to_render(const char *filename, ModelBuffer &buffer)
           buffer.normals[normalCount++] = vec3f(nx, ny, nz);
         }
 
-      if (line[1] == 't' && line[2] == ' ')
-        {
-          i32 tx, ty;
-          i32 read = sscanf(line, "vt %d %d", &tx, &ty);
-          buffer.tex_faces[texCount++] = vec2(tx, ty);
-        }
-
       if (line[0] == 'f' && line[1] == ' ')
 	{
-	  i32 vi[64], ni[64];
+	  i32 vi[64], ni[64], ti[64];
 	  int n = 0;
 
 	  char* p = line + 1;
@@ -77,6 +70,7 @@ bool object_to_render(const char *filename, ModelBuffer &buffer)
 	      if (parse_face_token(tok, &v, &vt, &vn) == 0) continue;
 
 	      vi[n] = resolve_index(v,  posCount);     
+	      ti[n] = resolve_index(vt, texCount);	      
 	      ni[n] = resolve_index(vn, normalCount);
 	      ++n;
 	    }
@@ -86,6 +80,7 @@ bool object_to_render(const char *filename, ModelBuffer &buffer)
 	      if (faceCount >= 40000) {  break; }
 
 	      buffer.faces[faceCount]        = vec3(vi[0], vi[i], vi[i + 1]);
+	      buffer.tex_faces[faceCount]    = vec3(ti[0], ti[i], ti[i + 1]);
 	      buffer.normal_faces[faceCount] = vec3(ni[0], ni[i], ni[i + 1]);
 	      ++faceCount;
 	    }
@@ -93,7 +88,7 @@ bool object_to_render(const char *filename, ModelBuffer &buffer)
     }
 
   fclose(file);
-
+  
   buffer.vertex_count = posCount;
   buffer.normal_count = normalCount;  
   buffer.face_count   = faceCount;

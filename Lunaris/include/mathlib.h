@@ -21,7 +21,8 @@ const i32 W = 3;
 struct Vector2 { i32 c[2]; };
 struct Vector3 { i32 c[3]; };
 struct Vector4 { i32 c[4]; };
- 
+
+struct Vector2f { f64 c[2]; };
 struct Vector3f { f64 c[3]; };
 struct Vector4f { f64 c[4]; };
 
@@ -33,6 +34,10 @@ f64 cross_product(Vector2 a, Vector2 b);
 ///////////////////////////////////////////////////////////
 
 Vector2 vec2(i32 x, i32 y);
+
+///////////////////////////////////////////////////////////
+
+Vector2f vec2f(f64 x, f64 y);
 
 ///////////////////////////////////////////////////////////
 

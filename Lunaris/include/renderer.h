@@ -8,6 +8,7 @@
 #include "tgaimage.h"
 #include "mathlib.h"
 #include "camera.h"
+#include "material.h"
 
 constexpr TGAColor white   = {255, 255, 255, 255}; // attention, BGRA order
 constexpr TGAColor green   = {  0, 255,   0, 255};
