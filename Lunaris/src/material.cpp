@@ -1,8 +1,18 @@
 #include "../include/material.h"
 
-i32 load_material(MaterialBuffer *material)
+i32 load_material(TGAImage &material, const char *filepath)
 {
-  material->diffusemap = read_tga_file("obj/african_head/african_head_diffuse.tga");
-  return 1;
+  i32 read = material.read_tga_file(filepath);
+
+  if (1 == read)
+    {
+      std::cout << "read_tga_file successful!\n";
+    }
+  else
+    {
+      std::cout << "read_tga_file unsuccessful!\n";
+    }
+  
+  return read;
 }
 

@@ -28,7 +28,7 @@ Vector4f RandomShader::vertex(int face, int vert)
   
   tri[vert] = { view.c[X], view.c[Y], view.c[Z] };
   normals[vert] = { view_normal.c[X], view_normal.c[Y], view_normal.c[Z] };
-
+  
   Vector4f perspective = mul_vec4f(Perspective, view);
   
   return perspective;
@@ -105,7 +105,7 @@ void draw_triangle(Vector3 point1, Vector3 point2, Vector3 point3,
   draw_line(point1, point3, framebuffer, color);
 }
 
-void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, std::vector<f64> &zbuffer)
+void rasterize_model(ModelBuffer& buffer, const MaterialBuffer *material, TGAImage &framebuffer, std::vector<f64> &zbuffer)
 {
   constexpr Vector3f    eye = {  0.0, 0.0, 2.0 };
   constexpr Vector3f center = {  0.0, 0.0, 0.0 };
@@ -141,7 +141,10 @@ void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, std::vector<f64
 
   for (i32 i = 0; i < buffer.face_count; i++)
     {
-      RandomShader shader(buffer);
+      if (material != nullptr) 
+	RandomShader shader(buffer, material);
+      else
+	RandomShader shader(buffer);
 	  
       for (i32 d = 0; d < 3; d++)
 	clip[d] = shader.vertex(i, d);   

@@ -44,8 +44,11 @@ struct RandomShader
   TGAColor color = {};
   Vector3f tri[3] = {};
   Vector3f normals[3] = {};
+  const MaterialBuffer& material; 
 
   RandomShader(const ModelBuffer& m) : model(m) {}
+  RandomShader(const ModelBuffer& _model, const MaterialBuffer* _material) :
+    model(_model), material(*_material) {}
 
   Vector4f vertex(int face, int vert);
 
@@ -56,8 +59,7 @@ void draw_line(Vector3 start_point, Vector3 end_point, TGAImage &framebuffer, TG
 
 void draw_triangle(Vector3 point1, Vector3 point2, Vector3 point3, TGAImage &framebuffer, TGAColor color);
 
-// void render_model(ModelBuffer& buffer, TGAImage &framebuffer, TGAColor color);
-void rasterize_model(ModelBuffer& buffer, TGAImage &framebuffer, std::vector<f64> &zbuffer);
+void rasterize_model(ModelBuffer& buffer, const MaterialBuffer *material, TGAImage &framebuffer, std::vector<f64> &zbuffer);
 
 void fill_triangle(const int width, const int height,
                    const Vector4f clip[3], TGAImage &framebuffer,

@@ -25,13 +25,20 @@ int main(int argc, char** argv)
   // const char *model_filename = "../obj/penger.obj";
   const char *model_filename = "../obj/teapot.obj";
 
+  MaterialBuffer *material = new MaterialBuffer();;
+  const char *diffuse_texture = "../obj/african_head/african_head_diffuse.tga";
+  load_material(material->diffusemap, diffuse_texture);
+
   object_to_render(model_filename, *buffer);
   
-  rasterize_model(*buffer, framebuffer, zbuffer);  
+  rasterize_model(*buffer, material, framebuffer, zbuffer);  
 
   std::cout << "Writing file..." << std::endl;
   framebuffer.write_tga_file("framebuffer.tga");
   std::cout << "Done." << std::endl;
+
+  delete buffer;
+  delete material;
   
   return 0;
 }
