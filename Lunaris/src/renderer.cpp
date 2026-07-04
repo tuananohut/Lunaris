@@ -58,6 +58,9 @@ TGAColor RandomShader::fragment(const Vector3f& bar) const
   // Vector3f base_color = { 255.0, 112.0, 191.0 };
   Vector3f base_color = { 250.0, 250.0, 250.0 };
 
+  if (material) {}
+  else {}
+
   TGAColor out;
   out[0] = static_cast<uint8_t>(base_color.c[0] * intensity);
   out[1] = static_cast<uint8_t>(base_color.c[1] * intensity);
@@ -141,10 +144,7 @@ void rasterize_model(ModelBuffer& buffer, const MaterialBuffer *material, TGAIma
 
   for (i32 i = 0; i < buffer.face_count; i++)
     {
-      if (material != nullptr) 
-	RandomShader shader(buffer, material);
-      else
-	RandomShader shader(buffer);
+      RandomShader shader(buffer, material);
 	  
       for (i32 d = 0; d < 3; d++)
 	clip[d] = shader.vertex(i, d);   
@@ -202,10 +202,13 @@ void fill_triangle(const int width, const int height,
       for (i32 x = bbminx; x <= bbmaxx; x++)
         {
           Vector2 p = { static_cast<i32>(x), static_cast<i32>(y) };
-          
-          f64 alpha = signed_area(screen[1], screen[2], p) / total_area;
+
+	  f64 alpha = signed_area(screen[1], screen[2], p) / total_area;
           f64 beta  = signed_area(screen[2], screen[0], p) / total_area;
           f64 gamma = signed_area(screen[0], screen[1], p) / total_area;
+	  
+          if (alpha < 0 || beta < 0 || gamma < 0)
+            continue;
 
 	  f64 a = alpha / clip[0].c[W];
 	  f64 b = beta  / clip[1].c[W];
@@ -213,9 +216,6 @@ void fill_triangle(const int width, const int height,
 
 	  f64 sum = a + b + g;
 	  Vector3f bar_persp = { a/sum, b/sum, g/sum };  
-
-          if (alpha < 0 || beta < 0 || gamma < 0)
-            continue;
 
           f64 z = alpha * normalized_device_coordinates[0].c[Z] + 
             beta  * normalized_device_coordinates[1].c[Z] + 

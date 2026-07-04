@@ -34,7 +34,7 @@ bool object_to_render(const char *filename, ModelBuffer &buffer)
 
   while (fgets(line, sizeof(line), file))
     {
-      if (line[0] == 'v' && line[1] == ' ' && posCount < 30000)
+      if (line[0] == 'v' && line[1] == ' ' && posCount < 10000)
         {
           f64 x, y, z;
           i32 read = sscanf(line, "v %lf %lf %lf", &x, &y, &z);
@@ -47,6 +47,13 @@ bool object_to_render(const char *filename, ModelBuffer &buffer)
           i32 read = sscanf(line, "vn %lf %lf %lf", &nx, &ny, &nz);
           buffer.normals[normalCount++] = vec3f(nx, ny, nz);
         }
+
+      if (line[0] == 'v' && line[1] == 't' && line[2] == ' ' && texCount < 30000)
+	{
+	  f64 u, v;
+	  sscanf(line, "vt %lf %lf", &u, &v);
+	  buffer.tex_coords[texCount++] = { u, v };
+	}
 
       if (line[0] == 'f' && line[1] == ' ')
 	{
@@ -92,6 +99,7 @@ bool object_to_render(const char *filename, ModelBuffer &buffer)
   buffer.vertex_count = posCount;
   buffer.normal_count = normalCount;  
   buffer.face_count   = faceCount;
+  buffer.tex_count = texCount; 
   
   return true;
 }

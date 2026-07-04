@@ -44,11 +44,10 @@ struct RandomShader
   TGAColor color = {};
   Vector3f tri[3] = {};
   Vector3f normals[3] = {};
-  const MaterialBuffer& material; 
+  const MaterialBuffer* material = nullptr; 
 
-  RandomShader(const ModelBuffer& m) : model(m) {}
-  RandomShader(const ModelBuffer& _model, const MaterialBuffer* _material) :
-    model(_model), material(*_material) {}
+  RandomShader(const ModelBuffer& _model, const MaterialBuffer* _material = nullptr) :
+    model(_model), material(_material) {}
 
   Vector4f vertex(int face, int vert);
 

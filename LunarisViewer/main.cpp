@@ -18,20 +18,23 @@ int main(int argc, char** argv)
     }
   
   ModelBuffer *buffer = new ModelBuffer();
-  // const char *model_filename = "../obj/african_head/african_head.obj";
+  const char *model_filename = "../obj/african_head/african_head.obj";
   // const char *model_filename = "../obj/diablo3_pose/diablo3_pose.obj";
   // const char *model_filename = "../obj/boggie/boggie_full.obj";
   // const char *model_filename = "../obj/bunny.obj";
   // const char *model_filename = "../obj/penger.obj";
-  const char *model_filename = "../obj/teapot.obj";
+  // const char *model_filename = "../obj/teapot.obj";
 
   MaterialBuffer *material = new MaterialBuffer();;
   const char *diffuse_texture = "../obj/african_head/african_head_diffuse.tga";
   load_material(material->diffusemap, diffuse_texture);
 
   object_to_render(model_filename, *buffer);
+
+  std::cout << "Tex count: " << std::endl;
+  std::cout << buffer->tex_count << std::endl;
   
-  rasterize_model(*buffer, material, framebuffer, zbuffer);  
+  rasterize_model(*buffer, material, framebuffer, zbuffer);
 
   std::cout << "Writing file..." << std::endl;
   framebuffer.write_tga_file("framebuffer.tga");
